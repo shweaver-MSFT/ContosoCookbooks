@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Contoso.WinUI.Views.HomeView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Contoso.WinUI.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodels="using:Contoso.ViewModels"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.Resources>
+        <DataTemplate x:Name="IngredientItemTemplate" x:DataType="viewmodels:IngredientViewModel">
+            <Grid>
+                <TextBlock Text="{x:Bind Name}" />
+            </Grid>
+        </DataTemplate>
+        
+        <DataTemplate x:Name="RecipeItemTemplate" x:DataType="viewmodels:RecipeViewModel">
+            <Grid>
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <SymbolIcon Symbol="List" />
+                        <TextBlock Text="{x:Bind Name}" FontSize="16" Margin="0,8" FontWeight="SemiBold" />
+                    </StackPanel>
+                    <ListView ItemsSource="{x:Bind Ingredients}" ItemTemplate="{StaticResource IngredientItemTemplate}" />
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+        
+        <DataTemplate x:Name="CookbookItemTemplate" x:DataType="viewmodels:CookbookViewModel">
+            <Grid>
+                <StackPanel Spacing="12">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <SymbolIcon Symbol="Library" />
+                        <TextBlock Text="{x:Bind Title}" FontSize="24" Margin="0,12" FontWeight="Bold" />
+                    </StackPanel>
+                    <ListView ItemsSource="{x:Bind Recipes}" ItemTemplate="{StaticResource RecipeItemTemplate}" />
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Grid>
+        <ScrollView>
+            <StackPanel Spacing="8">
+                <TextBlock Text="Home" />
+
+                <Button Command="{x:Bind ViewModel.LogoutCommand}">
+                    <TextBlock Text="Logout" />
+                </Button>
+
+                <Button Command="{x:Bind ViewModel.NavigateToSettingsCommand}">
+                    <TextBlock Text="Settings" />
+                </Button>
+
+                <ListView ItemsSource="{x:Bind ViewModel.Cookbooks}" ItemTemplate="{StaticResource CookbookItemTemplate}" />
+            </StackPanel>
+        </ScrollView>
+    </Grid>
+</Page>

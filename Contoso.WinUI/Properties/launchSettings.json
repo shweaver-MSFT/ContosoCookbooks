@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Contoso.WinUI (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Contoso.WinUI (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

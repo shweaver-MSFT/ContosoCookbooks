@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Contoso.WinUI.Views.LoginView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Contoso.WinUI.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <StackPanel Spacing="8">
+            <!-- Title -->
+            <TextBlock Text="Login" />
+
+            <!-- username/password -->
+            <TextBox PlaceholderText="username" Text="{x:Bind ViewModel.Username, Mode=TwoWay}" />
+            <PasswordBox PlaceholderText="password" Password="{x:Bind ViewModel.Password, Mode=TwoWay}" />
+
+            <!-- Go back -->
+            <Button Command="{x:Bind ViewModel.NavigateBackCommand}">
+                <TextBlock Text="Go back" />
+            </Button>
+
+            <!-- Login -->
+            <Button Command="{x:Bind ViewModel.LoginCommand}">
+                <TextBlock Text="Login" />
+            </Button>
+        </StackPanel>
+    </Grid>
+</Page>
