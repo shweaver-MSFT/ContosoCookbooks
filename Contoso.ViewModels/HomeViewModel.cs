@@ -19,6 +19,7 @@ namespace Contoso.ViewModels
 
         public IRelayCommand LogoutCommand { get; }
         public IRelayCommand NavigateToSettingsCommand { get; }
+        public IRelayCommand TestCommand { get; }
 
         private ObservableCollection<CookbookViewModel> _cookbooks;
         public ObservableCollection<CookbookViewModel> Cookbooks
@@ -38,6 +39,7 @@ namespace Contoso.ViewModels
 
             LogoutCommand = new RelayCommand(Logout);
             NavigateToSettingsCommand = new RelayCommand(NavigateToSettings);
+            TestCommand = new RelayCommand(Test);
         }
 
         public override async Task LoadAsync(object parameter = null)
@@ -71,6 +73,12 @@ namespace Contoso.ViewModels
         private void NavigateToSettings()
         {
             _navigationService.Navigate(new NavigationRequest(NavigationRouteKey.Settings));
+        }
+
+        private void Test()
+        {
+            // Look how we can update a property of a nested ViewModel and the view reflects the change appropriately.
+            Cookbooks[0].Recipes[0].Ingredients[0].Name += " Updated!";
         }
     }
 }

@@ -53,6 +53,10 @@
                     <TextBlock Text="Settings" />
                 </Button>
 
+                <Button Command="{x:Bind ViewModel.TestCommand}">
+                    <TextBlock Text="Update ingredients test" />
+                </Button>
+                
                 <ListView ItemsSource="{x:Bind ViewModel.Cookbooks, Mode=OneWay}" ItemTemplate="{StaticResource CookbookItemTemplate}" />
             </StackPanel>
         </ScrollView>
