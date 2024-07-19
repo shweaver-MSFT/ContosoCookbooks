@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Page
+<local:PageViewBase
     x:Class="Contoso.WinUI.Views.LoginView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -29,4 +29,4 @@
             </Button>
         </StackPanel>
     </Grid>
-</Page>
+</local:PageViewBase>
