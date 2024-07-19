@@ -45,7 +45,7 @@ namespace Contoso.ViewModels
             // Get cookbook models
             IList<ICookbookModel> cookbooks = await _cookbookDataProvider.GetCookbooksAsync();
 
-            // Create and load recipe VMs
+            // Create and load VMs
             foreach (ICookbookModel cookbook in cookbooks)
             {
                 CookbookViewModel cookbookVM = _cookbookViewModelFactory.Create();
