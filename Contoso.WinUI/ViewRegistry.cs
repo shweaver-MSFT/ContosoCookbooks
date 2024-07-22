@@ -11,8 +11,8 @@ namespace Contoso.WinUI
         {
             { NavigationRouteKey.Home, typeof(HomeView) },
             { NavigationRouteKey.Settings, typeof(SettingsView) },
-            { NavigationRouteKey.Landing, typeof(LandingView) },
-            { NavigationRouteKey.Login, typeof(LoginView) },
+            { NavigationRouteKey.CookbookDetails, typeof(CookbookDetailsView) },
+            { NavigationRouteKey.RecipeDetails, typeof(RecipeDetailsView) },
         };
 
         public static Type GetViewType(NavigationRouteKey key)

@@ -7,13 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contoso.WinUI", "Contoso.Wi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contoso.Core", "Contoso.Core\Contoso.Core.csproj", "{CD5D8943-AC8B-4BE4-966C-29966E3D8A3B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contoso.ViewModels", "Contoso.ViewModels\Contoso.ViewModels.csproj", "{419DC113-F066-4989-8111-9FB47DDD5549}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contoso.ViewModels", "Contoso.ViewModels\Contoso.ViewModels.csproj", "{419DC113-F066-4989-8111-9FB47DDD5549}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contoso.Services.Data", "Contoso.Services.Data\Contoso.Services.Data.csproj", "{6F8454C4-AEB1-41CA-84AF-25F137CD72C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contoso.Services.Data", "Contoso.Services.Data\Contoso.Services.Data.csproj", "{6F8454C4-AEB1-41CA-84AF-25F137CD72C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contoso.Services.Navigation", "Contoso.Services.Navigation\Contoso.Services.Navigation.csproj", "{CC1F16E4-53D9-435B-9216-30588824802E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contoso.Services.Authentication", "Contoso.Services.Authentication\Contoso.Services.Authentication.csproj", "{4707F1C7-19D1-4DF3-A279-882B9D3375A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contoso.Services.Navigation", "Contoso.Services.Navigation\Contoso.Services.Navigation.csproj", "{CC1F16E4-53D9-435B-9216-30588824802E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -115,22 +113,6 @@ Global
 		{CC1F16E4-53D9-435B-9216-30588824802E}.Release|x64.Build.0 = Release|Any CPU
 		{CC1F16E4-53D9-435B-9216-30588824802E}.Release|x86.ActiveCfg = Release|Any CPU
 		{CC1F16E4-53D9-435B-9216-30588824802E}.Release|x86.Build.0 = Release|Any CPU
-		{4707F1C7-19D1-4DF3-A279-882B9D3375A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4707F1C7-19D1-4DF3-A279-882B9D3375A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4707F1C7-19D1-4DF3-A279-882B9D3375A8}.Debug|ARM64.ActiveCfg = Debug|Any CPU
-		{4707F1C7-19D1-4DF3-A279-882B9D3375A8}.Debug|ARM64.Build.0 = Debug|Any CPU
-		{4707F1C7-19D1-4DF3-A279-882B9D3375A8}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{4707F1C7-19D1-4DF3-A279-882B9D3375A8}.Debug|x64.Build.0 = Debug|Any CPU
-		{4707F1C7-19D1-4DF3-A279-882B9D3375A8}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{4707F1C7-19D1-4DF3-A279-882B9D3375A8}.Debug|x86.Build.0 = Debug|Any CPU
-		{4707F1C7-19D1-4DF3-A279-882B9D3375A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4707F1C7-19D1-4DF3-A279-882B9D3375A8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4707F1C7-19D1-4DF3-A279-882B9D3375A8}.Release|ARM64.ActiveCfg = Release|Any CPU
-		{4707F1C7-19D1-4DF3-A279-882B9D3375A8}.Release|ARM64.Build.0 = Release|Any CPU
-		{4707F1C7-19D1-4DF3-A279-882B9D3375A8}.Release|x64.ActiveCfg = Release|Any CPU
-		{4707F1C7-19D1-4DF3-A279-882B9D3375A8}.Release|x64.Build.0 = Release|Any CPU
-		{4707F1C7-19D1-4DF3-A279-882B9D3375A8}.Release|x86.ActiveCfg = Release|Any CPU
-		{4707F1C7-19D1-4DF3-A279-882B9D3375A8}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

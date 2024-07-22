@@ -9,6 +9,24 @@
     mc:Ignorable="d">
 
     <Grid>
-        <TextBlock Text="{x:Bind ViewModel.Name, Mode=OneWay}" />
+        <Grid x:Name="LoadedStatePanel" Visibility="Collapsed">
+            <TextBlock Text="{x:Bind ViewModel.Name, Mode=OneWay}" />
+        </Grid>
+        
+        <Grid x:Name="UnloadedStatePanel">
+            <ProgressRing IsActive="True" />
+        </Grid>
+        
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="LoadingStates">
+                <VisualState x:Name="Unloaded" />
+                <VisualState x:Name="Loaded">
+                    <VisualState.Setters>
+                        <Setter Target="LoadedStatePanel.Visibility" Value="Visible" />
+                        <Setter Target="UnloadedStatePanel.Visibility" Value="Collapsed" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
     </Grid>
 </local:UserControlViewBase>

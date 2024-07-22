@@ -14,9 +14,10 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Controls\IngredientListItemView.xaml" />
+    <None Remove="Themes\Generic.xaml" />
+    <None Remove="Views\CookbookDetailsView.xaml" />
     <None Remove="Views\HomeView.xaml" />
-    <None Remove="Views\LandingView.xaml" />
-    <None Remove="Views\LoginView.xaml" />
+    <None Remove="Views\RecipeDetailsView.xaml" />
     <None Remove="Views\SettingsView.xaml" />
   </ItemGroup>
 
@@ -47,10 +48,19 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Contoso.Core\Contoso.Core.csproj" />
-    <ProjectReference Include="..\Contoso.Services.Authentication\Contoso.Services.Authentication.csproj" />
     <ProjectReference Include="..\Contoso.Services.Data\Contoso.Services.Data.csproj" />
     <ProjectReference Include="..\Contoso.Services.Navigation\Contoso.Services.Navigation.csproj" />
     <ProjectReference Include="..\Contoso.ViewModels\Contoso.ViewModels.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\CookbookDetailsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\RecipeDetailsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\SettingsView.xaml">
@@ -63,17 +73,12 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Views\LandingView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Update="Views\LoginView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
     <Page Update="Controls\IngredientListItemView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

@@ -6,54 +6,78 @@ using Contoso.Core.Services.DataProviders;
 using Contoso.Services.Navigation;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Contoso.ViewModels
 {
     public class HomeViewModel : ViewModelBase
     {
-        private readonly IAuthenticationService _authenticationService;
+        private readonly ICancellationService _cancellationService;
         private readonly INavigationService _navigationService;
         private readonly ICookbookDataProvider _cookbookDataProvider;
         private readonly IFactoryService<CookbookViewModel> _cookbookViewModelFactory;
 
-        public IRelayCommand LogoutCommand { get; }
+        private CancellationTokenSource _cancellationTokenSource;
+
+        public IRelayCommand NavigateToCookbookDetailsCommand { get; }
         public IRelayCommand NavigateToSettingsCommand { get; }
-        public IRelayCommand TestCommand { get; }
 
         private ObservableCollection<CookbookViewModel> _cookbooks;
         public ObservableCollection<CookbookViewModel> Cookbooks
         {
             get => _cookbooks;
-            set => OnPropertyChanged(ref _cookbooks, value);
+            private set => OnPropertyChanged(ref _cookbooks, value);
         }
 
-        public HomeViewModel(IAuthenticationService authenticationService, INavigationService navigationService, ICookbookDataProvider cookbookDataProvider, IFactoryService<CookbookViewModel> cookbookViewModelFactory)
+        public HomeViewModel(ICancellationService cancellationService, INavigationService navigationService, ICookbookDataProvider cookbookDataProvider, IFactoryService<CookbookViewModel> cookbookViewModelFactory)
         {
-            _authenticationService = authenticationService;
+            _cancellationService = cancellationService;
             _navigationService = navigationService;
             _cookbookDataProvider = cookbookDataProvider;
             _cookbookViewModelFactory = cookbookViewModelFactory;
 
+            _cancellationTokenSource = cancellationService.GetLinkedTokenSource();
+
             _cookbooks = [];
 
-            LogoutCommand = new RelayCommand(Logout);
+            NavigateToCookbookDetailsCommand = new RelayCommand<CookbookViewModel>(NavigateToCookbookDetails);
             NavigateToSettingsCommand = new RelayCommand(NavigateToSettings);
-            TestCommand = new RelayCommand(Test);
         }
 
         public override async Task LoadAsync(object parameter = null)
         {
+            _cancellationTokenSource = _cancellationService.GetLinkedTokenSource();
+
+            CancellationToken cancellationToken = _cancellationTokenSource.Token;
+            if (cancellationToken.IsCancellationRequested)
+            {
+                Unload();
+                return;
+            }
+
             // Get cookbook models
             IList<ICookbookModel> cookbooks = await _cookbookDataProvider.GetCookbooksAsync();
+            if (cancellationToken.IsCancellationRequested)
+            {
+                Unload();
+                return;
+            }
 
             // Create and load VMs
             foreach (ICookbookModel cookbook in cookbooks)
             {
                 CookbookViewModel cookbookVM = _cookbookViewModelFactory.Create();
-                await cookbookVM.LoadAsync(cookbook);
-
                 Cookbooks.Add(cookbookVM);
+
+                await Task.Delay(2000);
+
+                await cookbookVM.LoadAsync(cookbook);
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    Unload();
+                    return;
+                }
             }
 
             await base.LoadAsync(parameter);
@@ -61,24 +85,21 @@ namespace Contoso.ViewModels
 
         public override void Unload()
         {
+            _cancellationTokenSource.Cancel();
             _cookbooks = [];
             base.Unload();
         }
 
-        private void Logout()
+        private void NavigateToCookbookDetails(CookbookViewModel cookbook)
         {
-            _authenticationService.Logout();
+            _cancellationTokenSource.Cancel();
+            _navigationService.Navigate(new NavigationRequest(NavigationRouteKey.CookbookDetails, cookbook));
         }
 
         private void NavigateToSettings()
         {
+            _cancellationTokenSource.Cancel();
             _navigationService.Navigate(new NavigationRequest(NavigationRouteKey.Settings));
-        }
-
-        private void Test()
-        {
-            // Look how we can update a property of a nested ViewModel and the view reflects the change appropriately.
-            Cookbooks[0].Recipes[0].Ingredients[0].Name += " Updated!";
         }
     }
 }

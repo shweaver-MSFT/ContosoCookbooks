@@ -3,8 +3,10 @@
     public enum NavigationRouteKey
     {
         Home,
-        Landing,
-        Login,
+        CookbookDetails,
+        CookbookEdit,
+        RecipeDetails,
+        RecipeEdit,
         Settings
     }
 }

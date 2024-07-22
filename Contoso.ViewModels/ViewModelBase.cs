@@ -28,7 +28,7 @@ namespace Contoso.ViewModels
             set => OnPropertyChanged(ref _isLoaded, value);
         }
 
-        public virtual Task LoadAsync(object parameter = default)
+        public virtual Task LoadAsync(object parameter = null)
         {
             IsLoaded = true;
             return Task.CompletedTask;

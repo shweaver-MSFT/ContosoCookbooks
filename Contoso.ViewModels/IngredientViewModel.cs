@@ -30,9 +30,6 @@ namespace Contoso.ViewModels
                 _telemetryService.Log($"IngredientViewModel loaded: {Name}");
             }
 
-            string testString = _localizationService.GetString("test");
-            _telemetryService.Log(testString);
-
             return base.LoadAsync(parameter);
         }
 

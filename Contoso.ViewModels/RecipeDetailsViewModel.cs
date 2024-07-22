@@ -1,66 +1,60 @@
-﻿using Contoso.Core.Models.Data;
+﻿using CommunityToolkit.Mvvm.Input;
+using Contoso.Core.Models.Data;
 using Contoso.Core.Services;
 using Contoso.Core.Services.DataProviders;
+using Contoso.ViewModels.Factories;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace Contoso.ViewModels
 {
-    public class RecipeViewModel : ViewModelBase
+    public class RecipeDetailsViewModel :  ViewModelBase
     {
-        private readonly ITelemetryService _telemetryService;
-        private readonly IFactoryService<IngredientViewModel> _ingredientViewModelFactory;
+        private readonly INavigationService _navigationService;
         private readonly ICookbookDataProvider _cookbookDataProvider;
+        private readonly IFactoryService<IngredientViewModel> _ingredientViewModelFactory;
 
-        private IRecipeModel _model;
-        public IRecipeModel Model
-        {
-            get => _model;
-            private set => OnPropertyChanged(ref _model, value);
-        }
+        public IRelayCommand NavigateBackCommand { get; }
 
         private string _name;
         public string Name
         {
             get => _name;
-            private set => OnPropertyChanged(ref _name, value);
+            set => OnPropertyChanged(ref _name, value);
         }
 
         private ObservableCollection<IngredientViewModel> _ingredients;
         public ObservableCollection<IngredientViewModel> Ingredients
         {
             get => _ingredients;
-            private set => OnPropertyChanged(ref _ingredients, value);
+            set => OnPropertyChanged(ref _ingredients, value);
         }
 
-        public RecipeViewModel(ITelemetryService telemetryService, IFactoryService<IngredientViewModel> ingredientViewModelFactory, ICookbookDataProvider cookbookDataProvider)
+        public RecipeDetailsViewModel(INavigationService navigationService, ICookbookDataProvider cookbookDataProvider, IFactoryService<IngredientViewModel> ingredientViewModelFactory)
         {
-            _telemetryService = telemetryService;
-            _ingredientViewModelFactory = ingredientViewModelFactory;
+            _navigationService = navigationService;
             _cookbookDataProvider = cookbookDataProvider;
+            _ingredientViewModelFactory = ingredientViewModelFactory;
+
+            NavigateBackCommand = new RelayCommand(NavigateBack);
 
             _ingredients = [];
         }
 
         public override async Task LoadAsync(object parameter = null)
         {
-            if (parameter is IRecipeModel recipe)
+            if (parameter is RecipeViewModel recipe)
             {
-                // Recipe meta
-                Model = recipe;
                 Name = recipe.Name;
 
-                // Create IngredientViewModels for each IIngredientModel
-                var ingredients = await _cookbookDataProvider.GetIngredientsAsync(recipe.Id);
+                IList<IIngredientModel> ingredients = await _cookbookDataProvider.GetIngredientsAsync(recipe.Model.Id);
                 foreach (IIngredientModel ingredient in ingredients)
                 {
                     IngredientViewModel ingredientVM = _ingredientViewModelFactory.Create();
                     await ingredientVM.LoadAsync(ingredient);
-
                     Ingredients.Add(ingredientVM);
                 }
-
-                _telemetryService.Log($"RecipeViewModel loaded: {Name}");
             }
 
             await base.LoadAsync(parameter);
@@ -71,6 +65,11 @@ namespace Contoso.ViewModels
             _name = string.Empty;
             _ingredients = [];
             base.Unload();
+        }
+
+        private void NavigateBack()
+        {
+            _navigationService.GoBack();
         }
     }
 }

@@ -2,7 +2,6 @@
 using Contoso.Core.Services;
 using Contoso.Core.Services.DataProviders;
 using Contoso.Data.Mock;
-using Contoso.Services.Authentication;
 using Contoso.Services.Navigation;
 using Contoso.ViewModels;
 using Contoso.ViewModels.Factories;
@@ -22,10 +21,10 @@ namespace Contoso.WinUI
             services.AddSingleton<ITelemetryService, TelemetryService>();
             services.AddSingleton<ISettingsService, SettingsService>();
             services.AddSingleton<ILocalizationService, LocalizationService>();
-            services.AddSingleton<IAuthenticationService, MockAuthenticationService>();
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<INotificationService, NotificationService>();
             services.AddSingleton<ICookbookDataProvider, MockCookbookDataProvider>();
+            services.AddSingleton<ICancellationService, CancellationService>();
 
             // Factories
             services.AddSingleton<IFactoryService<CookbookViewModel>, CookbookViewModelFactory>();
@@ -34,10 +33,10 @@ namespace Contoso.WinUI
 
             // ViewModels
             services.AddSingleton<MainViewModel>();
-            services.AddSingleton<LandingViewModel>();
-            services.AddSingleton<SettingsViewModel>();
-            services.AddSingleton<LoginViewModel>();
             services.AddSingleton<HomeViewModel>();
+            services.AddSingleton<SettingsViewModel>();
+            services.AddSingleton<CookbookDetailsViewModel>();
+            services.AddSingleton<RecipeDetailsViewModel>();
 
             // Configure the default Ioc container
             IServiceProvider serviceProvider = services.BuildServiceProvider();

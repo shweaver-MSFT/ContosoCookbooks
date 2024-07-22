@@ -117,7 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="test" xml:space="preserve">
-    <value>Hello World</value>
+  <data name="Home_CookbookListItem_RecipeCountFormat" xml:space="preserve">
+    <value>{0} recipes</value>
+  </data>
+  <data name="Home_SettingsButton_TextBlock.Text" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Home_TitleTextBlock.Text" xml:space="preserve">
+    <value>Contoso Cookbooks</value>
   </data>
 </root>
