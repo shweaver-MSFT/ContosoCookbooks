@@ -29,16 +29,16 @@ namespace Contoso.WinUI.Views
 
         private void RegisterForEvents(IngredientViewModel vm)
         {
-            vm.PropertyChanged += ViewModel_PropertyChanged;
+            vm.PropertyChanged += OnViewModelPropertyChanged;
             UpdateVisualState();
         }
 
         private void UnregisterEvents(IngredientViewModel vm)
         {
-            vm.PropertyChanged -= ViewModel_PropertyChanged;
+            vm.PropertyChanged -= OnViewModelPropertyChanged;
         }
 
-        private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void OnViewModelPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(IngredientViewModel.IsLoaded))
             {
