@@ -4,8 +4,10 @@
     {
         Home,
         CookbookDetails,
+        CookbookCreation,
         CookbookEdit,
         RecipeDetails,
+        RecipeCreation,
         RecipeEdit,
         Settings
     }

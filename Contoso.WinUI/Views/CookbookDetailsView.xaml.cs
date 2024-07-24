@@ -15,7 +15,10 @@ namespace Contoso.WinUI.Views
 
         private void RecipeListView_ItemClick(object sender, Microsoft.UI.Xaml.Controls.ItemClickEventArgs e)
         {
-            ViewModel.NavigateToRecipeDetailsCommand.Execute(e.ClickedItem);
+            if (ViewModel.NavigateToRecipeDetailsCommand.CanExecute(e.ClickedItem))
+            {
+                ViewModel.NavigateToRecipeDetailsCommand.Execute(e.ClickedItem);
+            }
         }
     }
 }

@@ -30,6 +30,7 @@ namespace Contoso.WinUI
             services.AddSingleton<IFactoryService<CookbookViewModel>, CookbookViewModelFactory>();
             services.AddSingleton<IFactoryService<RecipeViewModel>, RecipeViewModelFactory>();
             services.AddSingleton<IFactoryService<IngredientViewModel>, IngredientViewModelFactory>();
+            services.AddSingleton<IFactoryService<MeasurementViewModel>, MeasurementViewModelFactory>();
 
             // ViewModels
             services.AddSingleton<MainViewModel>();

@@ -1,6 +1,5 @@
 using Contoso.ViewModels;
 using Microsoft.UI.Xaml;
-using System;
 
 namespace Contoso.WinUI.Views
 {
@@ -10,14 +9,47 @@ namespace Contoso.WinUI.Views
             "ViewModel",
             typeof(IngredientViewModel),
             typeof(IngredientListItemView),
-            new PropertyMetadata(null, new PropertyChangedCallback(OnViewModelPropertyChanged)));
+            new PropertyMetadata(null, new PropertyChangedCallback(OnViewModelChanged)));
 
-        private static void OnViewModelPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnViewModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (e.NewValue != null)
+            if (d is IngredientListItemView control)
             {
+                if (e.OldValue is IngredientViewModel oldVM)
+                {
+                    control.UnregisterEvents(oldVM);
+                }
 
+                if (e.NewValue is IngredientViewModel newVM)
+                {
+                    control.RegisterForEvents(newVM);
+                }
             }
+        }
+
+        private void RegisterForEvents(IngredientViewModel vm)
+        {
+            vm.PropertyChanged += ViewModel_PropertyChanged;
+            UpdateVisualState();
+        }
+
+        private void UnregisterEvents(IngredientViewModel vm)
+        {
+            vm.PropertyChanged -= ViewModel_PropertyChanged;
+        }
+
+        private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(IngredientViewModel.IsLoaded))
+            {
+                UpdateVisualState();
+            }
+        }
+
+        private void UpdateVisualState()
+        {
+            string state = ViewModel != null && ViewModel.IsLoaded ? "Loaded" : "Unloaded";
+            VisualStateManager.GoToState(this, state, true);
         }
 
         public IngredientViewModel ViewModel

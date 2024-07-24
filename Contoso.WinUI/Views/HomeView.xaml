@@ -7,27 +7,41 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:Contoso.ViewModels"
+    xmlns:converters="using:Contoso.WinUI.Converters"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+
         <DataTemplate x:Key="CookbookListItemTemplate" x:DataType="vm:CookbookViewModel">
             <Grid Width="400">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="{x:Bind Title}" />
-                <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right">
-                    <TextBlock Text="{x:Bind RecipeCountText, Mode=OneWay}" />
-                </StackPanel>
+                <!-- Unloaded state -->
+                <Grid Visibility="{x:Bind IsLoaded, Mode=OneWay, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                    <StackPanel Spacing="8" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <ProgressRing IsActive="True" Height="24" Width="24" VerticalAlignment="Center" />
+                        <TextBlock Text="Loading..." VerticalAlignment="Center" />
+                    </StackPanel>
+                </Grid>
+                <!-- Loaded state -->
+                <Grid Visibility="{x:Bind IsLoaded, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{x:Bind Title, Mode=OneWay}" />
+                    <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right">
+                        <TextBlock Text="{x:Bind RecipeCountText, Mode=OneWay}" />
+                    </StackPanel>
+                </Grid>
             </Grid>
         </DataTemplate>
     </Page.Resources>
 
     <Grid>
         <ScrollView>
-            <StackPanel Spacing="8" HorizontalAlignment="Center" Padding="0,48">
+            <StackPanel Spacing="24" HorizontalAlignment="Center" Padding="0,48">
                 <!-- Title -->
                 <TextBlock
                     x:Uid="Home_TitleTextBlock" 
@@ -41,11 +55,6 @@
                     <Button Command="{x:Bind ViewModel.NavigateToSettingsCommand}">
                         <TextBlock x:Uid="Home_SettingsButton_TextBlock" />
                     </Button>
-                    
-                    <!-- Create a new Cookbook -->
-                    <!--<Button Command="{x:Bind ViewModel.NavigateToNewCookbookCommand}">
-                        <TextBlock x:Uid="Home_NewCookbookButton_TextBlock" />
-                    </Button>-->
                 </StackPanel>
 
                 <!-- Cookbooks -->
@@ -54,7 +63,19 @@
                     ItemTemplate="{StaticResource CookbookListItemTemplate}"
                     SelectionMode="None"
                     IsItemClickEnabled="True"
-                    ItemClick="CookbooksListView_ItemClick" />
+                    ItemClick="CookbooksListView_ItemClick">
+                    <ListView.Header>
+                        <TextBlock Text="Cookbooks" FontSize="18" FontWeight="SemiLight" />
+                    </ListView.Header>
+                    <ListView.Footer>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <!-- Create a new Cookbook -->
+                            <Button Command="{x:Bind ViewModel.NavigateToCookbookCreationCommand}">
+                                <TextBlock Text="New cookbook" />
+                            </Button>
+                        </StackPanel>
+                    </ListView.Footer>
+                </ListView>
             </StackPanel>
         </ScrollView>
     </Grid>

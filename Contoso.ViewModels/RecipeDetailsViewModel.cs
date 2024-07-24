@@ -5,15 +5,19 @@ using Contoso.Core.Services.DataProviders;
 using Contoso.ViewModels.Factories;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Contoso.ViewModels
 {
     public class RecipeDetailsViewModel :  ViewModelBase
     {
+        private readonly ICancellationService _cancellationService;
         private readonly INavigationService _navigationService;
         private readonly ICookbookDataProvider _cookbookDataProvider;
         private readonly IFactoryService<IngredientViewModel> _ingredientViewModelFactory;
+
+        private CancellationTokenSource _cancellationTokenSource;
 
         public IRelayCommand NavigateBackCommand { get; }
 
@@ -31,29 +35,48 @@ namespace Contoso.ViewModels
             set => OnPropertyChanged(ref _ingredients, value);
         }
 
-        public RecipeDetailsViewModel(INavigationService navigationService, ICookbookDataProvider cookbookDataProvider, IFactoryService<IngredientViewModel> ingredientViewModelFactory)
+        public RecipeDetailsViewModel(ICancellationService cancellationService, INavigationService navigationService, ICookbookDataProvider cookbookDataProvider, IFactoryService<IngredientViewModel> ingredientViewModelFactory)
         {
+            _cancellationService = cancellationService;
             _navigationService = navigationService;
             _cookbookDataProvider = cookbookDataProvider;
             _ingredientViewModelFactory = ingredientViewModelFactory;
 
-            NavigateBackCommand = new RelayCommand(NavigateBack);
-
+            _cancellationTokenSource = cancellationService.GetLinkedTokenSource();
             _ingredients = [];
+
+            NavigateBackCommand = new RelayCommand(NavigateBack);
         }
 
-        public override async Task LoadAsync(object parameter = null)
+        public override async Task LoadAsync(object parameter = null, CancellationToken? cancellationToken = null)
         {
-            if (parameter is RecipeViewModel recipe)
+            bool IsCancelled() => cancellationToken.HasValue && cancellationToken.Value.IsCancellationRequested;
+            if (cancellationToken == null)
+            {
+                _cancellationTokenSource = _cancellationService.GetLinkedTokenSource();
+                cancellationToken = _cancellationTokenSource.Token;
+            }
+
+            if (parameter is IRecipeModel recipe)
             {
                 Name = recipe.Name;
 
-                IList<IIngredientModel> ingredients = await _cookbookDataProvider.GetIngredientsAsync(recipe.Model.Id);
+                // Get ingredient models
+                IList<IIngredientModel> ingredients = await _cookbookDataProvider.GetIngredientsAsync(recipe.Id);
+                if (IsCancelled())
+                {
+                    Unload();
+                    return;
+                }
+
+                // Create VMs for each model
                 foreach (IIngredientModel ingredient in ingredients)
                 {
                     IngredientViewModel ingredientVM = _ingredientViewModelFactory.Create();
-                    await ingredientVM.LoadAsync(ingredient);
                     Ingredients.Add(ingredientVM);
+                    
+                    // Don't wait for the load task
+                    _ = ingredientVM.LoadAsync(ingredient, cancellationToken);
                 }
             }
 

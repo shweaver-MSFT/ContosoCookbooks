@@ -6,15 +6,19 @@ using Contoso.Core.Services.DataProviders;
 using Contoso.Services.Navigation;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Contoso.ViewModels
 {
     public class CookbookDetailsViewModel :  ViewModelBase
     {
+        private readonly ICancellationService _cancellationService;
         private readonly INavigationService _navigationService;
         private readonly ICookbookDataProvider _cookbookDataProvider;
         private readonly IFactoryService<RecipeViewModel> _recipeViewModelFactory;
+
+        private CancellationTokenSource _cancellationTokenSource;
 
         public IRelayCommand AddRecipeCommand { get; }
         public IRelayCommand EditRecipeCommand { get; }
@@ -35,34 +39,52 @@ namespace Contoso.ViewModels
             set => OnPropertyChanged(ref _recipes, value);
         }
 
-        public CookbookDetailsViewModel(INavigationService navigationService, ICookbookDataProvider cookbookDataProvider, IFactoryService<RecipeViewModel> recipeViewModelFactory)
+        public CookbookDetailsViewModel(ICancellationService cancellationService, INavigationService navigationService, ICookbookDataProvider cookbookDataProvider, IFactoryService<RecipeViewModel> recipeViewModelFactory)
         {
+            _cancellationService = cancellationService;
             _navigationService = navigationService;
             _cookbookDataProvider = cookbookDataProvider;
             _recipeViewModelFactory = recipeViewModelFactory;
 
-            AddRecipeCommand = new RelayCommand(AddRecipe);
-            EditRecipeCommand = new RelayCommand(EditRecipe);
-            NavigateBackCommand = new RelayCommand(NavigateBack);
-            NavigateToRecipeDetailsCommand = new RelayCommand<RecipeViewModel>(NavigateToRecipeDetails);
-
+            _cancellationTokenSource = cancellationService.GetLinkedTokenSource();
             _recipes = [];
+
+            AddRecipeCommand = new RelayCommand(AddRecipe, () => IsLoaded);
+            EditRecipeCommand = new RelayCommand(EditRecipe, () => IsLoaded);
+            NavigateBackCommand = new RelayCommand(NavigateBack);
+            NavigateToRecipeDetailsCommand = new RelayCommand<RecipeViewModel>(NavigateToRecipeDetails, (vm) => vm.IsLoaded);
         }
 
-        public override async Task LoadAsync(object parameter = null)
+        public override async Task LoadAsync(object parameter = null, CancellationToken? cancellationToken = null)
         {
-            if (parameter is CookbookViewModel cookbookViewModel)
+            bool IsCancelled() => cancellationToken.HasValue && cancellationToken.Value.IsCancellationRequested;
+            if (cancellationToken == null)
+            {
+                _cancellationTokenSource = _cancellationService.GetLinkedTokenSource();
+                cancellationToken = _cancellationTokenSource.Token;
+            }
+
+            if (parameter is ICookbookModel cookbookModel)
             {
                 // Title
-                CookbookTitle = cookbookViewModel.Title;
+                CookbookTitle = cookbookModel.Title;
 
                 // Get recipe models
-                IList<IRecipeModel> recipes = await _cookbookDataProvider.GetRecipesAsync(cookbookViewModel.Model.Id);
+                IList<IRecipeModel> recipes = await _cookbookDataProvider.GetRecipesAsync(cookbookModel.Id);
+                if (IsCancelled())
+                {
+                    Unload();
+                    return;
+                }
+
+                // Create VMs for each model
                 foreach (IRecipeModel recipe in recipes)
                 {
                     RecipeViewModel recipeVM = _recipeViewModelFactory.Create();
-                    await recipeVM.LoadAsync(recipe);
                     Recipes.Add(recipeVM);
+
+                    // Don't wait for the load task
+                    _ = recipeVM.LoadAsync(recipe, cancellationToken);
                 }
             }
 
@@ -94,7 +116,7 @@ namespace Contoso.ViewModels
 
         private void NavigateToRecipeDetails(RecipeViewModel recipe)
         {
-            _navigationService.Navigate(new NavigationRequest(NavigationRouteKey.RecipeDetails, recipe));
+            _navigationService.Navigate(new NavigationRequest(NavigationRouteKey.RecipeDetails, recipe.Model));
         }
     }
 }

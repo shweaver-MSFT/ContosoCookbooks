@@ -2,6 +2,7 @@
 using Contoso.Core.Services;
 using Contoso.Core.Services.DataProviders;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Contoso.ViewModels
@@ -40,16 +41,33 @@ namespace Contoso.ViewModels
             _cookbookDataProvider = cookbookDataProvider;
         }
 
-        public override async Task LoadAsync(object parameter = null)
+        public override async Task LoadAsync(object parameter = null, CancellationToken? cancellationToken = null)
         {
+            bool IsCancelled()
+            {
+                return cancellationToken.HasValue && cancellationToken.Value.IsCancellationRequested;
+            };
+
             if (parameter is ICookbookModel cookbook)
             {
+                await Task.Delay(2000);
+                if (IsCancelled())
+                {
+                    Unload();
+                    return;
+                }
+
                 // Cookbook meta
                 Model = cookbook;
                 Title = cookbook.Title;
 
                 // Get recipe models
                 IList<IRecipeModel> recipes = await _cookbookDataProvider.GetRecipesAsync(cookbook.Id);
+                if (IsCancelled())
+                {
+                    Unload();
+                    return;
+                }
 
                 // RecipeCountText
                 string format = _localizationService.GetString("Home_CookbookListItem_RecipeCountFormat");

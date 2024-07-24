@@ -12,7 +12,7 @@
 
     <Page.Resources>
         <DataTemplate x:DataType="vm:IngredientViewModel" x:Key="IngredientListItemTemplate">
-            <local:IngredientListItemView ViewModel="{x:Bind}" />
+            <local:IngredientListItemView ViewModel="{x:Bind Mode=OneWay}" />
         </DataTemplate>
     </Page.Resources>
 
@@ -27,7 +27,7 @@
             </Button>
         </StackPanel>
 
-        <StackPanel HorizontalAlignment="Center" Grid.Row="1">
+        <StackPanel HorizontalAlignment="Center" Grid.Row="1" Spacing="8">
             <!-- Recipe name -->
             <TextBlock 
                 Text="{x:Bind ViewModel.Name, Mode=OneWay}"

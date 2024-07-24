@@ -1,7 +1,7 @@
 ﻿using Contoso.Core.Models.Data;
 using Contoso.Core.Services;
-using Contoso.Core.Services.DataProviders;
 using System.Collections.ObjectModel;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Contoso.ViewModels
@@ -9,8 +9,6 @@ namespace Contoso.ViewModels
     public class RecipeViewModel : ViewModelBase
     {
         private readonly ITelemetryService _telemetryService;
-        private readonly IFactoryService<IngredientViewModel> _ingredientViewModelFactory;
-        private readonly ICookbookDataProvider _cookbookDataProvider;
 
         private IRecipeModel _model;
         public IRecipeModel Model
@@ -33,32 +31,29 @@ namespace Contoso.ViewModels
             private set => OnPropertyChanged(ref _ingredients, value);
         }
 
-        public RecipeViewModel(ITelemetryService telemetryService, IFactoryService<IngredientViewModel> ingredientViewModelFactory, ICookbookDataProvider cookbookDataProvider)
+        public RecipeViewModel(ITelemetryService telemetryService)
         {
             _telemetryService = telemetryService;
-            _ingredientViewModelFactory = ingredientViewModelFactory;
-            _cookbookDataProvider = cookbookDataProvider;
 
             _ingredients = [];
         }
 
-        public override async Task LoadAsync(object parameter = null)
+        public override async Task LoadAsync(object parameter = null, CancellationToken? cancellationToken = null)
         {
+            bool IsCancelled() => cancellationToken.HasValue && cancellationToken.Value.IsCancellationRequested;
+
             if (parameter is IRecipeModel recipe)
             {
+                await Task.Delay(2000);
+                if (IsCancelled())
+                {
+                    Unload();
+                    return;
+                }
+
                 // Recipe meta
                 Model = recipe;
                 Name = recipe.Name;
-
-                // Create IngredientViewModels for each IIngredientModel
-                var ingredients = await _cookbookDataProvider.GetIngredientsAsync(recipe.Id);
-                foreach (IIngredientModel ingredient in ingredients)
-                {
-                    IngredientViewModel ingredientVM = _ingredientViewModelFactory.Create();
-                    await ingredientVM.LoadAsync(ingredient);
-
-                    Ingredients.Add(ingredientVM);
-                }
 
                 _telemetryService.Log($"RecipeViewModel loaded: {Name}");
             }

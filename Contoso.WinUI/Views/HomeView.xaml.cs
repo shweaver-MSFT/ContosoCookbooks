@@ -16,7 +16,10 @@ namespace Contoso.WinUI.Views
 
         private void CookbooksListView_ItemClick(object sender, ItemClickEventArgs e)
         {
-            ViewModel.NavigateToCookbookDetailsCommand.Execute(e.ClickedItem);
+            if (ViewModel.NavigateToCookbookDetailsCommand.CanExecute(e.ClickedItem))
+            {
+                ViewModel.NavigateToCookbookDetailsCommand.Execute(e.ClickedItem);
+            }
         }
     }
 }

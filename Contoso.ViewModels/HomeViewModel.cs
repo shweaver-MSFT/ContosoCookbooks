@@ -4,6 +4,7 @@ using Contoso.Core.Models.Navigation;
 using Contoso.Core.Services;
 using Contoso.Core.Services.DataProviders;
 using Contoso.Services.Navigation;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
@@ -21,6 +22,7 @@ namespace Contoso.ViewModels
         private CancellationTokenSource _cancellationTokenSource;
 
         public IRelayCommand NavigateToCookbookDetailsCommand { get; }
+        public IRelayCommand NavigateToCookbookCreationCommand { get; }
         public IRelayCommand NavigateToSettingsCommand { get; }
 
         private ObservableCollection<CookbookViewModel> _cookbooks;
@@ -38,46 +40,44 @@ namespace Contoso.ViewModels
             _cookbookViewModelFactory = cookbookViewModelFactory;
 
             _cancellationTokenSource = cancellationService.GetLinkedTokenSource();
-
             _cookbooks = [];
 
-            NavigateToCookbookDetailsCommand = new RelayCommand<CookbookViewModel>(NavigateToCookbookDetails);
+            NavigateToCookbookDetailsCommand = new RelayCommand<CookbookViewModel>(NavigateToCookbookDetails, (vm) => vm.IsLoaded);
+            NavigateToCookbookCreationCommand = new RelayCommand(NavigateToCookbookCreation);
             NavigateToSettingsCommand = new RelayCommand(NavigateToSettings);
         }
 
-        public override async Task LoadAsync(object parameter = null)
+        public override async Task LoadAsync(object parameter = null, CancellationToken? cancellationToken = null)
         {
-            _cancellationTokenSource = _cancellationService.GetLinkedTokenSource();
-
-            CancellationToken cancellationToken = _cancellationTokenSource.Token;
-            if (cancellationToken.IsCancellationRequested)
+            bool IsCancelled() => cancellationToken.HasValue && cancellationToken.Value.IsCancellationRequested;
+            if (cancellationToken == null)
             {
-                Unload();
-                return;
+                _cancellationTokenSource = _cancellationService.GetLinkedTokenSource();
+                cancellationToken = _cancellationTokenSource.Token;
             }
 
             // Get cookbook models
             IList<ICookbookModel> cookbooks = await _cookbookDataProvider.GetCookbooksAsync();
-            if (cancellationToken.IsCancellationRequested)
+            if (IsCancelled())
             {
                 Unload();
                 return;
             }
 
-            // Create and load VMs
+            // Create VMs for each model
             foreach (ICookbookModel cookbook in cookbooks)
             {
                 CookbookViewModel cookbookVM = _cookbookViewModelFactory.Create();
                 Cookbooks.Add(cookbookVM);
 
-                await Task.Delay(2000);
+                // Don't wait for the load task
+                _ = cookbookVM.LoadAsync(cookbook, cancellationToken);
+            }
 
-                await cookbookVM.LoadAsync(cookbook);
-                if (cancellationToken.IsCancellationRequested)
-                {
-                    Unload();
-                    return;
-                }
+            if (IsCancelled())
+            {
+                Unload();
+                return;
             }
 
             await base.LoadAsync(parameter);
@@ -93,7 +93,13 @@ namespace Contoso.ViewModels
         private void NavigateToCookbookDetails(CookbookViewModel cookbook)
         {
             _cancellationTokenSource.Cancel();
-            _navigationService.Navigate(new NavigationRequest(NavigationRouteKey.CookbookDetails, cookbook));
+            _navigationService.Navigate(new NavigationRequest(NavigationRouteKey.CookbookDetails, cookbook.Model));
+        }
+
+        private void NavigateToCookbookCreation()
+        {
+            _cancellationTokenSource.Cancel();
+            _navigationService.Navigate(new NavigationRequest(NavigationRouteKey.CookbookCreation));
         }
 
         private void NavigateToSettings()
