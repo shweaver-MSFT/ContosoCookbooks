@@ -4,7 +4,6 @@ using Contoso.Core.Models.Navigation;
 using Contoso.Core.Services;
 using Contoso.Core.Services.DataProviders;
 using Contoso.Services.Navigation;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;

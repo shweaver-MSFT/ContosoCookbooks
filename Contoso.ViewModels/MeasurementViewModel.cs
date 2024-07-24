@@ -1,6 +1,7 @@
 ﻿using Contoso.Core.Models.Data;
 using Contoso.Core.Services;
 using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -33,6 +34,8 @@ namespace Contoso.ViewModels
 
         public override Task LoadAsync(object parameter = null, CancellationToken? cancellationToken = null)
         {
+            Debug.Assert(cancellationToken != null);
+
             if (parameter is IMeasurementModel measurementModel)
             {
                 AmountText = GetAmountString(measurementModel.Amount);

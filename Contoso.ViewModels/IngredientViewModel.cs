@@ -1,5 +1,6 @@
 ﻿using Contoso.Core.Models.Data;
 using Contoso.Core.Services;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -34,8 +35,10 @@ namespace Contoso.ViewModels
 
         public override async Task LoadAsync(object parameter = null, CancellationToken? cancellationToken = null)
         {
-            bool IsCancelled() => cancellationToken.HasValue && cancellationToken.Value.IsCancellationRequested;
+            Debug.Assert(cancellationToken != null);
 
+            bool IsCancelled() => cancellationToken.HasValue && cancellationToken.Value.IsCancellationRequested;
+            
             if (parameter is IIngredientModel ingredient)
             {
                 await Task.Delay(2000);

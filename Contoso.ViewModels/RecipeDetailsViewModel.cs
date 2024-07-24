@@ -51,6 +51,7 @@ namespace Contoso.ViewModels
         public override async Task LoadAsync(object parameter = null, CancellationToken? cancellationToken = null)
         {
             bool IsCancelled() => cancellationToken.HasValue && cancellationToken.Value.IsCancellationRequested;
+
             if (cancellationToken == null)
             {
                 _cancellationTokenSource = _cancellationService.GetLinkedTokenSource();
