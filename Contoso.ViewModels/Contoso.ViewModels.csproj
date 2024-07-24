@@ -16,7 +16,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Contoso.Core\Contoso.Core.csproj" />
-    <ProjectReference Include="..\Contoso.Services.Authentication\Contoso.Services.Authentication.csproj" />
     <ProjectReference Include="..\Contoso.Services.Navigation\Contoso.Services.Navigation.csproj" />
   </ItemGroup>
 </Project>

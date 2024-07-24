@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Contoso.ViewModels
@@ -28,7 +29,7 @@ namespace Contoso.ViewModels
             set => OnPropertyChanged(ref _isLoaded, value);
         }
 
-        public virtual Task LoadAsync(object parameter = default)
+        public virtual Task LoadAsync(object parameter = null, CancellationToken? cancellationToken = null)
         {
             IsLoaded = true;
             return Task.CompletedTask;

@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Contoso.Core.Services;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Contoso.ViewModels
@@ -17,7 +18,7 @@ namespace Contoso.ViewModels
             NavigateBackCommand = new RelayCommand(NavigateBack);
         }
 
-        public override Task LoadAsync(object parameter = null)
+        public override Task LoadAsync(object parameter = null, CancellationToken? cancellationToken = null)
         {
             return base.LoadAsync(parameter);
         }

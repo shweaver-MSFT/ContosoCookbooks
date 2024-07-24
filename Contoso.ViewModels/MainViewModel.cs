@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Contoso.Core.Models.Navigation;
 using Contoso.Core.Services;
@@ -29,10 +30,10 @@ namespace Contoso.ViewModels
             NavigationRequested?.Invoke(this, e);
         }
 
-        public override Task LoadAsync(object parameter = null)
+        public override Task LoadAsync(object parameter = null, CancellationToken? cancellationToken = null)
         {
-            // Go to the Landing view.
-            _navigationService.Navigate(new NavigationRequest(NavigationRouteKey.Landing));
+            // Go to the default view.
+            _navigationService.Navigate(new NavigationRequest(NavigationRouteKey.Home));
 
             return base.LoadAsync(parameter);
         }
