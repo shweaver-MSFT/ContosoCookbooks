@@ -14,22 +14,22 @@ namespace Contoso.ViewModels
         private readonly ILocalizationService _localizationService;
         private readonly ICookbookDataProvider _cookbookDataProvider;
 
-        private ICookbookModel _model;
-        public ICookbookModel Model
+        private ICookbookModel? _model;
+        public ICookbookModel? Model
         {
             get => _model;
             private set => OnPropertyChanged(ref _model, value);
         }
 
-        private string _title;
-        public string Title
+        private string? _title;
+        public string? Title
         {
             get => _title;
             private set => OnPropertyChanged(ref _title, value);
         }
 
-        private string _recipeCountText;
-        public string RecipeCountText
+        private string? _recipeCountText;
+        public string? RecipeCountText
         {
             get => _recipeCountText;
             private set => OnPropertyChanged(ref _recipeCountText, value);
@@ -42,7 +42,7 @@ namespace Contoso.ViewModels
             _cookbookDataProvider = cookbookDataProvider;
         }
 
-        public override async Task LoadAsync(object parameter = null, CancellationToken? cancellationToken = null)
+        public override async Task LoadAsync(object? parameter = null, CancellationToken? cancellationToken = null)
         {
             Debug.Assert(cancellationToken != null);
 

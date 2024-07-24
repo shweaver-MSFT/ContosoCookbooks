@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Contoso.ViewModels
 {
@@ -30,16 +31,21 @@ namespace Contoso.ViewModels
         { 
             _telemetryService = telemetryService;
             _localizationService = localizationService;
+
+            _measurementTypeText = string.Empty;
+            _amountText = string.Empty;
         }
 
-        public override Task LoadAsync(object parameter = null, CancellationToken? cancellationToken = null)
+        public override Task LoadAsync(object? parameter = null, CancellationToken? cancellationToken = null)
         {
             Debug.Assert(cancellationToken != null);
 
             if (parameter is IMeasurementModel measurementModel)
             {
                 AmountText = GetAmountString(measurementModel.Amount);
-                MeasurementTypeText = GetMeasurementTypeString(measurementModel.MeasurementType, measurementModel.Amount);
+                MeasurementTypeText = GetMeasurementTypeString(_localizationService, measurementModel.MeasurementType, measurementModel.Amount);
+
+                _telemetryService.Log($"MeasurementViewModel loaded: {AmountText} {MeasurementTypeText}");
             }
 
             return base.LoadAsync(parameter, cancellationToken);
@@ -47,12 +53,12 @@ namespace Contoso.ViewModels
 
         public override void Unload()
         {
-            _measurementTypeText = null;
-            _amountText = null;
+            _measurementTypeText = string.Empty;
+            _amountText = string.Empty;
             base.Unload();
         }
 
-        private string GetAmountString(double amount)
+        private static string GetAmountString(double amount)
         {
             double noChange = Math.Truncate(amount);
             double change = amount - noChange;
@@ -68,7 +74,7 @@ namespace Contoso.ViewModels
                 {
                     if (amount >= 1)
                     {
-                        return $"{noChange.ToString()} {changeString}";
+                        return $"{noChange} {changeString}";
                     }
                     else
                     {
@@ -80,49 +86,40 @@ namespace Contoso.ViewModels
             return amount.ToString();
         }
 
-        private string GetMeasurementTypeString(MeasurementType measurementType, double amount)
+        private static string GetMeasurementTypeString(ILocalizationService localizationService, MeasurementType measurementType, double amount)
         {
             bool plural = amount > 1;
 
-            switch (measurementType)
+            return measurementType switch
             {
-                case MeasurementType.Piece:
-                    return plural
-                        ? _localizationService.GetString("MeasurementType_Piece_Plural")
-                        : _localizationService.GetString("MeasurementType_Piece");
-                case MeasurementType.Cup:
-                    return plural
-                        ? _localizationService.GetString("MeasurementType_Cup_Plural")
-                        : _localizationService.GetString("MeasurementType_Cup");
-                case MeasurementType.Teaspoon:
-                    return plural
-                        ? _localizationService.GetString("MeasurementType_Teaspoon_Plural")
-                        : _localizationService.GetString("MeasurementType_Teaspoon");
-                case MeasurementType.Tablespoon:
-                    return plural
-                        ? _localizationService.GetString("MeasurementType_Tablespoon_Plural")
-                        : _localizationService.GetString("MeasurementType_Tablespoon");
-                case MeasurementType.Ounce:
-                    return plural
-                        ? _localizationService.GetString("MeasurementType_Ounce_Plural")
-                        : _localizationService.GetString("MeasurementType_Ounce");
-                case MeasurementType.Pound:
-                    return plural
-                        ? _localizationService.GetString("MeasurementType_Pound_Plural")
-                        : _localizationService.GetString("MeasurementType_Pound");
-                case MeasurementType.Can:
-                    return plural
-                        ? _localizationService.GetString("MeasurementType_Can_Plural")
-                        : _localizationService.GetString("MeasurementType_Can");
-                case MeasurementType.Whole:
-                    return plural
-                        ? _localizationService.GetString("MeasurementType_Whole_Plural")
-                        : _localizationService.GetString("MeasurementType_Whole");
-                default:
-                    return plural
-                        ? _localizationService.GetString("MeasurementType_Unknown_Plural")
-                        : _localizationService.GetString("MeasurementType_Unknown");
-            }
+                MeasurementType.Piece => plural
+                    ? localizationService.GetString("MeasurementType_Piece_Plural")
+                    : localizationService.GetString("MeasurementType_Piece"),
+                MeasurementType.Cup => plural
+                    ? localizationService.GetString("MeasurementType_Cup_Plural")
+                    : localizationService.GetString("MeasurementType_Cup"),
+                MeasurementType.Teaspoon => plural
+                    ? localizationService.GetString("MeasurementType_Teaspoon_Plural")
+                    : localizationService.GetString("MeasurementType_Teaspoon"),
+                MeasurementType.Tablespoon => plural
+                    ? localizationService.GetString("MeasurementType_Tablespoon_Plural")
+                    : localizationService.GetString("MeasurementType_Tablespoon"),
+                MeasurementType.Ounce => plural
+                    ? localizationService.GetString("MeasurementType_Ounce_Plural")
+                    : localizationService.GetString("MeasurementType_Ounce"),
+                MeasurementType.Pound => plural
+                    ? localizationService.GetString("MeasurementType_Pound_Plural")
+                    : localizationService.GetString("MeasurementType_Pound"),
+                MeasurementType.Can => plural
+                    ? localizationService.GetString("MeasurementType_Can_Plural")
+                    : localizationService.GetString("MeasurementType_Can"),
+                MeasurementType.Whole => plural
+                    ? localizationService.GetString("MeasurementType_Whole_Plural")
+                    : localizationService.GetString("MeasurementType_Whole"),
+                _ => plural
+                    ? localizationService.GetString("MeasurementType_Unknown_Plural")
+                    : localizationService.GetString("MeasurementType_Unknown"),
+            };
         }
     }
 }

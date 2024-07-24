@@ -7,7 +7,7 @@ namespace Contoso.WinUI.Services
     {
         private readonly IPropertySet _settings;
 
-        public SettingsService(IPropertySet cache = null) 
+        public SettingsService(IPropertySet? cache = null) 
         {
             _settings = cache ?? new PropertySet();
         }
@@ -27,9 +27,9 @@ namespace Contoso.WinUI.Services
             _settings[key] = value;
         }
 
-        public bool TryGet<T>(string key, out T value)
+        public bool TryGet<T>(string key, out T? value)
         {
-            if (_settings.TryGetValue(key, out object valueObj))
+            if (_settings.TryGetValue(key, out object? valueObj))
             {
                 value = (T)valueObj;
                 return true;

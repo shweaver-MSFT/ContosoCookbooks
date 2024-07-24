@@ -11,8 +11,8 @@ namespace Contoso.ViewModels
     {
         private readonly ITelemetryService _telemetryService;
 
-        private IRecipeModel _model;
-        public IRecipeModel Model
+        private IRecipeModel? _model;
+        public IRecipeModel? Model
         {
             get => _model;
             private set => OnPropertyChanged(ref _model, value);
@@ -36,10 +36,11 @@ namespace Contoso.ViewModels
         {
             _telemetryService = telemetryService;
 
+            _name = string.Empty;
             _ingredients = [];
         }
 
-        public override async Task LoadAsync(object parameter = null, CancellationToken? cancellationToken = null)
+        public override async Task LoadAsync(object? parameter = null, CancellationToken? cancellationToken = null)
         {
             Debug.Assert(cancellationToken != null);
 

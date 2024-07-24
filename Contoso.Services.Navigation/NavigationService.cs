@@ -7,11 +7,11 @@ namespace Contoso.Services.Navigation
 {
     public class NavigationService : INavigationService
     {
-        public event EventHandler<INavigationRequest> NavigationRequested;
+        public event EventHandler<INavigationRequest>? NavigationRequested;
 
         private readonly Stack<INavigationRequest> _navigationStack;
 
-        public NavigationService(Stack<INavigationRequest> navigationStack = null)
+        public NavigationService(Stack<INavigationRequest>? navigationStack = null)
         {
             _navigationStack = navigationStack ?? new Stack<INavigationRequest>();
         }

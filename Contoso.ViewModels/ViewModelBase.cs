@@ -9,9 +9,9 @@ namespace Contoso.ViewModels
     public abstract class ViewModelBase : INotifyPropertyChanged
     {
         #region INotifyPropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected void OnPropertyChanged<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+        protected void OnPropertyChanged<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
         {
             if (!EqualityComparer<T>.Default.Equals(field, value))
             {
@@ -29,7 +29,7 @@ namespace Contoso.ViewModels
             set => OnPropertyChanged(ref _isLoaded, value);
         }
 
-        public virtual Task LoadAsync(object parameter = null, CancellationToken? cancellationToken = null)
+        public virtual Task LoadAsync(object? parameter = null, CancellationToken? cancellationToken = null)
         {
             IsLoaded = true;
             return Task.CompletedTask;

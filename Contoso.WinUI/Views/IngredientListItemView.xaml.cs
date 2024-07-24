@@ -36,9 +36,10 @@ namespace Contoso.WinUI.Views
         private void UnregisterEvents(IngredientViewModel vm)
         {
             vm.PropertyChanged -= OnViewModelPropertyChanged;
+            UpdateVisualState();
         }
 
-        private void OnViewModelPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(IngredientViewModel.IsLoaded))
             {
@@ -48,7 +49,7 @@ namespace Contoso.WinUI.Views
 
         private void UpdateVisualState()
         {
-            string state = ViewModel != null && ViewModel.IsLoaded ? "Loaded" : "Unloaded";
+            string state = ViewModel != null && ViewModel.IsLoaded ? "LoadedState" : "UnloadedState";
             VisualStateManager.GoToState(this, state, true);
         }
 
@@ -61,7 +62,7 @@ namespace Contoso.WinUI.Views
         public IngredientListItemView()
         {
             this.InitializeComponent();
-            VisualStateManager.GoToState(this, "Unloaded", true);
+            UpdateVisualState();
         }
     }
 }

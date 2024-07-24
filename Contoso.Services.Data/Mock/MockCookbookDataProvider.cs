@@ -87,7 +87,7 @@ namespace Contoso.Data.Mock
                 }
             }
 
-            return null;
+            throw new KeyNotFoundException($"Key not found: {cookbookId}");
         }
 
         public async Task<IList<ICookbookModel>> GetCookbooksAsync()
@@ -108,7 +108,7 @@ namespace Contoso.Data.Mock
                 }
             }
 
-            return null;
+            throw new KeyNotFoundException($"Key not found: {ingredientId}");
         }
 
         public async Task<IList<IIngredientModel>> GetIngredientsAsync(string recipeId)
@@ -139,7 +139,7 @@ namespace Contoso.Data.Mock
                 }
             }
 
-            return null;
+            throw new KeyNotFoundException($"Key not found: {recipeId}");
         }
 
         public async Task<IList<IRecipeModel>> GetRecipesAsync(string cookbookId)

@@ -9,8 +9,6 @@ namespace Contoso.ViewModels
     public class IngredientViewModel : ViewModelBase
     {
         private readonly ITelemetryService _telemetryService;
-        private readonly ILocalizationService _localizationService;
-        private readonly IFactoryService<MeasurementViewModel> _measurementViewModelFactory;
 
         private string _name;
         public string Name
@@ -19,21 +17,18 @@ namespace Contoso.ViewModels
             set => OnPropertyChanged(ref _name, value);
         }
 
-        private MeasurementViewModel _measurement;
-        public MeasurementViewModel Measurement
-        {
-            get => _measurement;
-            set => OnPropertyChanged(ref _measurement, value);
-        }
+        private readonly MeasurementViewModel _measurement;
+        public MeasurementViewModel Measurement => _measurement;
 
-        public IngredientViewModel(ILocalizationService localizationService, ITelemetryService telemetryService, IFactoryService<MeasurementViewModel> measurementViewModelFactory)
+        public IngredientViewModel(ITelemetryService telemetryService, IFactoryService<MeasurementViewModel> measurementViewModelFactory)
         {
-            _localizationService = localizationService;
             _telemetryService = telemetryService;
-            _measurementViewModelFactory = measurementViewModelFactory;
+
+            _name = string.Empty;
+            _measurement = measurementViewModelFactory.Create();
         }
 
-        public override async Task LoadAsync(object parameter = null, CancellationToken? cancellationToken = null)
+        public override async Task LoadAsync(object? parameter = null, CancellationToken? cancellationToken = null)
         {
             Debug.Assert(cancellationToken != null);
 
@@ -51,8 +46,7 @@ namespace Contoso.ViewModels
                 // Ingredient meta
                 Name = ingredient.Name;
 
-                // Create a MeasurementViewModel and load it.
-                Measurement = _measurementViewModelFactory.Create();
+                // Load the measurement
                 await Measurement.LoadAsync(ingredient.Measurement, cancellationToken);
                 if (IsCancelled())
                 {
@@ -69,7 +63,7 @@ namespace Contoso.ViewModels
         public override void Unload()
         {
             _name = string.Empty;
-            _measurement = null;
+            _measurement.Unload();
             base.Unload();
         }
     }

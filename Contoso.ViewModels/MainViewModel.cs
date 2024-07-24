@@ -11,7 +11,7 @@ namespace Contoso.ViewModels
     {
         private readonly INavigationService _navigationService;
 
-        public event EventHandler<INavigationRequest> NavigationRequested;
+        public event EventHandler<INavigationRequest>? NavigationRequested;
 
         public MainViewModel(INavigationService navigationService)
         {
@@ -24,13 +24,13 @@ namespace Contoso.ViewModels
             _navigationService.NavigationRequested -= NavigationService_NavigationRequested;
         }
 
-        private void NavigationService_NavigationRequested(object sender, INavigationRequest e)
+        private void NavigationService_NavigationRequested(object? sender, INavigationRequest e)
         {
             // Forward the request so the view can perform the navigation.
             NavigationRequested?.Invoke(this, e);
         }
 
-        public override Task LoadAsync(object parameter = null, CancellationToken? cancellationToken = null)
+        public override Task LoadAsync(object? parameter = null, CancellationToken? cancellationToken = null)
         {
             // Go to the default view.
             _navigationService.Navigate(new NavigationRequest(NavigationRouteKey.Home));

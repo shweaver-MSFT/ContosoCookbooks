@@ -43,12 +43,13 @@ namespace Contoso.ViewModels
             _ingredientViewModelFactory = ingredientViewModelFactory;
 
             _cancellationTokenSource = cancellationService.GetLinkedTokenSource();
+            _name = string.Empty;
             _ingredients = [];
 
             NavigateBackCommand = new RelayCommand(NavigateBack);
         }
 
-        public override async Task LoadAsync(object parameter = null, CancellationToken? cancellationToken = null)
+        public override async Task LoadAsync(object? parameter = null, CancellationToken? cancellationToken = null)
         {
             bool IsCancelled() => cancellationToken.HasValue && cancellationToken.Value.IsCancellationRequested;
 

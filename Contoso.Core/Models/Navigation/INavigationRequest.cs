@@ -3,6 +3,6 @@
     public interface INavigationRequest
     {
         NavigationRouteKey NavigationRouteKey { get; }
-        object Parameter { get; }
+        object? Parameter { get; }
     }
 }

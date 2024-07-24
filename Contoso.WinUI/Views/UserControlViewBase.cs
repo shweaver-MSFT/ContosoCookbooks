@@ -8,9 +8,9 @@ namespace Contoso.WinUI.Views
 {
     public abstract class UserControlViewBase : UserControl, INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected void OnPropertyChanged<T>(DependencyProperty property, T value, [CallerMemberName] string propertyName = null)
+        protected void OnPropertyChanged<T>(DependencyProperty property, T value, [CallerMemberName] string? propertyName = null)
         {
             T currentValue = (T)GetValue(property);
             if (!EqualityComparer<T>.Default.Equals(value, currentValue))

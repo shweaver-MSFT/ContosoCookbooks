@@ -47,15 +47,16 @@ namespace Contoso.ViewModels
             _recipeViewModelFactory = recipeViewModelFactory;
 
             _cancellationTokenSource = cancellationService.GetLinkedTokenSource();
+            _cookbookTitle = string.Empty;
             _recipes = [];
 
             AddRecipeCommand = new RelayCommand(AddRecipe, () => IsLoaded);
             EditRecipeCommand = new RelayCommand(EditRecipe, () => IsLoaded);
             NavigateBackCommand = new RelayCommand(NavigateBack);
-            NavigateToRecipeDetailsCommand = new RelayCommand<RecipeViewModel>(NavigateToRecipeDetails, (vm) => vm.IsLoaded);
+            NavigateToRecipeDetailsCommand = new RelayCommand<RecipeViewModel>(NavigateToRecipeDetails, (vm) => vm?.IsLoaded == true);
         }
 
-        public override async Task LoadAsync(object parameter = null, CancellationToken? cancellationToken = null)
+        public override async Task LoadAsync(object? parameter = null, CancellationToken? cancellationToken = null)
         {
             bool IsCancelled() => cancellationToken.HasValue && cancellationToken.Value.IsCancellationRequested;
             if (cancellationToken == null)
@@ -114,9 +115,12 @@ namespace Contoso.ViewModels
             _navigationService.GoBack();
         }
 
-        private void NavigateToRecipeDetails(RecipeViewModel recipe)
+        private void NavigateToRecipeDetails(RecipeViewModel? recipe)
         {
-            _navigationService.Navigate(new NavigationRequest(NavigationRouteKey.RecipeDetails, recipe.Model));
+            if (recipe != null)
+            {
+                _navigationService.Navigate(new NavigationRequest(NavigationRouteKey.RecipeDetails, recipe.Model));
+            }
         }
     }
 }

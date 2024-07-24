@@ -7,7 +7,7 @@ namespace Contoso.WinUI.Services
     {
         private readonly ResourceLoader _resourceLoader;
 
-        public LocalizationService(ResourceLoader resourceLoader = null)
+        public LocalizationService(ResourceLoader? resourceLoader = null)
         {
             _resourceLoader = resourceLoader ?? new();
         }

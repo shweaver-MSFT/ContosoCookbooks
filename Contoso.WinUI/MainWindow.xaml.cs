@@ -31,7 +31,7 @@ public sealed partial class MainWindow : Window
         await ViewModel.LoadAsync();
     }
 
-    private void OnNavigationRequested(object sender, INavigationRequest e)
+    private void OnNavigationRequested(object? sender, INavigationRequest e)
     {
         Type viewType = ViewRegistry.GetViewType(e.NavigationRouteKey);
         RootFrame.Navigate(viewType, e.Parameter);

@@ -18,7 +18,7 @@ namespace Contoso.ViewModels
             NavigateBackCommand = new RelayCommand(NavigateBack);
         }
 
-        public override Task LoadAsync(object parameter = null, CancellationToken? cancellationToken = null)
+        public override Task LoadAsync(object? parameter = null, CancellationToken? cancellationToken = null)
         {
             return base.LoadAsync(parameter);
         }
