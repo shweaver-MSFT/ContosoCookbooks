@@ -94,6 +94,7 @@ namespace Contoso.ViewModels
 
         private void NavigateBack()
         {
+            _cancellationTokenSource.Cancel();
             _navigationService.GoBack();
         }
     }
