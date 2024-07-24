@@ -51,6 +51,11 @@ namespace Contoso.ViewModels
                 // Create a MeasurementViewModel and load it.
                 Measurement = _measurementViewModelFactory.Create();
                 await Measurement.LoadAsync(ingredient.Measurement, cancellationToken);
+                if (IsCancelled())
+                {
+                    Unload();
+                    return;
+                }
 
                 _telemetryService.Log($"IngredientViewModel loaded: {Name}");
             }
@@ -61,6 +66,7 @@ namespace Contoso.ViewModels
         public override void Unload()
         {
             _name = string.Empty;
+            _measurement = null;
             base.Unload();
         }
     }

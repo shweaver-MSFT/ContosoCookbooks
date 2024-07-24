@@ -57,21 +57,25 @@
 
             <!-- Action buttons -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8">
-                <Button>
+                <Button IsEnabled="False">
                     <TextBlock Text="Add Recipe" />
                 </Button>
-                <Button>
+                <Button IsEnabled="False">
                     <TextBlock Text="Edit Cookbook" />
                 </Button>
             </StackPanel>
-
+            
             <!-- Recipes -->
             <ListView 
                 ItemsSource="{x:Bind ViewModel.Recipes, Mode=OneWay}"
                 ItemTemplate="{StaticResource RecipeListItemTemplate}"
                 IsItemClickEnabled="True"
                 SelectionMode="None"
-                ItemClick="RecipeListView_ItemClick" />
+                ItemClick="RecipeListView_ItemClick">
+                    <ListView.Header>
+                        <TextBlock Text="Recipes" FontSize="18" FontWeight="SemiLight" />
+                    </ListView.Header>
+                </ListView>
         </StackPanel>
     </Grid>
 </local:PageViewBase>

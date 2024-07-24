@@ -43,10 +43,7 @@ namespace Contoso.ViewModels
 
         public override async Task LoadAsync(object parameter = null, CancellationToken? cancellationToken = null)
         {
-            bool IsCancelled()
-            {
-                return cancellationToken.HasValue && cancellationToken.Value.IsCancellationRequested;
-            };
+            bool IsCancelled() => cancellationToken.HasValue && cancellationToken.Value.IsCancellationRequested;
 
             if (parameter is ICookbookModel cookbook)
             {

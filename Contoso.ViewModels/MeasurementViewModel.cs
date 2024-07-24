@@ -44,6 +44,8 @@ namespace Contoso.ViewModels
 
         public override void Unload()
         {
+            _measurementTypeText = null;
+            _amountText = null;
             base.Unload();
         }
 

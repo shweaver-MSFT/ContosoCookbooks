@@ -50,10 +50,14 @@
                     FontWeight="SemiBold"/>
                 
                 <!-- Action buttons -->
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8">
                     <!-- App settings -->
                     <Button Command="{x:Bind ViewModel.NavigateToSettingsCommand}">
                         <TextBlock x:Uid="Home_SettingsButton_TextBlock" />
+                    </Button>
+                    <!-- Create a new Cookbook -->
+                    <Button Command="{x:Bind ViewModel.NavigateToCookbookCreationCommand}" IsEnabled="False">
+                        <TextBlock Text="New cookbook" />
                     </Button>
                 </StackPanel>
 
@@ -67,14 +71,6 @@
                     <ListView.Header>
                         <TextBlock Text="Cookbooks" FontSize="18" FontWeight="SemiLight" />
                     </ListView.Header>
-                    <ListView.Footer>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <!-- Create a new Cookbook -->
-                            <Button Command="{x:Bind ViewModel.NavigateToCookbookCreationCommand}">
-                                <TextBlock Text="New cookbook" />
-                            </Button>
-                        </StackPanel>
-                    </ListView.Footer>
                 </ListView>
             </StackPanel>
         </ScrollView>
