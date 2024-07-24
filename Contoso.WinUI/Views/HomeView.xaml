@@ -6,58 +6,72 @@
     xmlns:local="using:Contoso.WinUI.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:viewmodels="using:Contoso.ViewModels"
+    xmlns:vm="using:Contoso.ViewModels"
+    xmlns:converters="using:Contoso.WinUI.Converters"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.Resources>
-        <DataTemplate x:Name="IngredientItemTemplate" x:DataType="viewmodels:IngredientViewModel">
-            <local:IngredientListItemView ViewModel="{x:Bind Mode=OneWay}" />
-        </DataTemplate>
-        
-        <DataTemplate x:Name="RecipeItemTemplate" x:DataType="viewmodels:RecipeViewModel">
-            <Grid>
-                <StackPanel Spacing="8">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
-                        <SymbolIcon Symbol="List" />
-                        <TextBlock Text="{x:Bind Name, Mode=OneWay}" FontSize="16" Margin="0,8" FontWeight="SemiBold" />
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+
+        <DataTemplate x:Key="CookbookListItemTemplate" x:DataType="vm:CookbookViewModel">
+            <Grid Width="400">
+                <!-- Unloaded state -->
+                <Grid Visibility="{x:Bind IsLoaded, Mode=OneWay, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                    <StackPanel Spacing="8" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <ProgressRing IsActive="True" Height="24" Width="24" VerticalAlignment="Center" />
+                        <TextBlock Text="Loading..." VerticalAlignment="Center" />
                     </StackPanel>
-                    <ListView ItemsSource="{x:Bind Ingredients, Mode=OneWay}" ItemTemplate="{StaticResource IngredientItemTemplate}" />
-                </StackPanel>
-            </Grid>
-        </DataTemplate>
-        
-        <DataTemplate x:Name="CookbookItemTemplate" x:DataType="viewmodels:CookbookViewModel">
-            <Grid>
-                <StackPanel Spacing="12">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
-                        <SymbolIcon Symbol="Library" />
-                        <TextBlock Text="{x:Bind Title, Mode=OneWay}" FontSize="24" Margin="0,12" FontWeight="Bold" />
+                </Grid>
+                <!-- Loaded state -->
+                <Grid Visibility="{x:Bind IsLoaded, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{x:Bind Title, Mode=OneWay}" />
+                    <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right">
+                        <TextBlock Text="{x:Bind RecipeCountText, Mode=OneWay}" />
                     </StackPanel>
-                    <ListView ItemsSource="{x:Bind Recipes, Mode=OneWay}" ItemTemplate="{StaticResource RecipeItemTemplate}" />
-                </StackPanel>
+                </Grid>
             </Grid>
         </DataTemplate>
     </Page.Resources>
 
     <Grid>
         <ScrollView>
-            <StackPanel Spacing="8">
-                <TextBlock Text="Home" />
-
-                <Button Command="{x:Bind ViewModel.LogoutCommand}">
-                    <TextBlock Text="Logout" />
-                </Button>
-
-                <Button Command="{x:Bind ViewModel.NavigateToSettingsCommand}">
-                    <TextBlock Text="Settings" />
-                </Button>
-
-                <Button Command="{x:Bind ViewModel.TestCommand}">
-                    <TextBlock Text="Update ingredients test" />
-                </Button>
+            <StackPanel Spacing="24" HorizontalAlignment="Center" Padding="0,48">
+                <!-- Title -->
+                <TextBlock
+                    x:Uid="Home_TitleTextBlock" 
+                    HorizontalAlignment="Center"
+                    FontSize="48"
+                    FontWeight="SemiBold"/>
                 
-                <ListView ItemsSource="{x:Bind ViewModel.Cookbooks, Mode=OneWay}" ItemTemplate="{StaticResource CookbookItemTemplate}" />
+                <!-- Action buttons -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8">
+                    <!-- App settings -->
+                    <Button Command="{x:Bind ViewModel.NavigateToSettingsCommand}">
+                        <TextBlock x:Uid="Home_SettingsButton_TextBlock" />
+                    </Button>
+                    <!-- Create a new Cookbook -->
+                    <Button Command="{x:Bind ViewModel.NavigateToCookbookCreationCommand}" IsEnabled="False">
+                        <TextBlock Text="New cookbook" />
+                    </Button>
+                </StackPanel>
+
+                <!-- Cookbooks -->
+                <ListView
+                    ItemsSource="{x:Bind ViewModel.Cookbooks, Mode=OneWay}"
+                    ItemTemplate="{StaticResource CookbookListItemTemplate}"
+                    SelectionMode="None"
+                    IsItemClickEnabled="True"
+                    ItemClick="CookbooksListView_ItemClick">
+                    <ListView.Header>
+                        <TextBlock Text="Cookbooks" FontSize="18" FontWeight="SemiLight" />
+                    </ListView.Header>
+                </ListView>
             </StackPanel>
         </ScrollView>
     </Grid>

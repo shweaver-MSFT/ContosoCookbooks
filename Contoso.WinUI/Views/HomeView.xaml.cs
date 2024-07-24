@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.DependencyInjection;
 using Contoso.ViewModels;
+using Microsoft.UI.Xaml.Controls;
 
 namespace Contoso.WinUI.Views
 {
@@ -11,6 +12,14 @@ namespace Contoso.WinUI.Views
         {
             this.InitializeComponent();
             DataContext = Ioc.Default.GetRequiredService<HomeViewModel>();
+        }
+
+        private void CookbooksListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            if (ViewModel.NavigateToCookbookDetailsCommand.CanExecute(e.ClickedItem))
+            {
+                ViewModel.NavigateToCookbookDetailsCommand.Execute(e.ClickedItem);
+            }
         }
     }
 }

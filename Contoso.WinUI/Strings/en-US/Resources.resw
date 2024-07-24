@@ -117,7 +117,67 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="test" xml:space="preserve">
-    <value>Hello World</value>
+  <data name="Home_CookbookListItem_RecipeCountFormat" xml:space="preserve">
+    <value>{0} recipes</value>
+  </data>
+  <data name="Home_SettingsButton_TextBlock.Text" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Home_TitleTextBlock.Text" xml:space="preserve">
+    <value>Contoso Cookbooks</value>
+  </data>
+  <data name="MeasurementType_Can" xml:space="preserve">
+    <value>can</value>
+  </data>
+  <data name="MeasurementType_Can_Plural" xml:space="preserve">
+    <value>cans</value>
+  </data>
+  <data name="MeasurementType_Cup" xml:space="preserve">
+    <value>cup</value>
+  </data>
+  <data name="MeasurementType_Cup_Plural" xml:space="preserve">
+    <value>cups</value>
+  </data>
+  <data name="MeasurementType_Ounce" xml:space="preserve">
+    <value>oz</value>
+  </data>
+  <data name="MeasurementType_Ounce_Plural" xml:space="preserve">
+    <value>oz</value>
+  </data>
+  <data name="MeasurementType_Piece" xml:space="preserve">
+    <value>piece</value>
+  </data>
+  <data name="MeasurementType_Piece_Plural" xml:space="preserve">
+    <value>pieces</value>
+  </data>
+  <data name="MeasurementType_Pound" xml:space="preserve">
+    <value>lb</value>
+  </data>
+  <data name="MeasurementType_Pound_Plural" xml:space="preserve">
+    <value>lbs</value>
+  </data>
+  <data name="MeasurementType_Tablespoon" xml:space="preserve">
+    <value>tbsp</value>
+  </data>
+  <data name="MeasurementType_Tablespoon_Plural" xml:space="preserve">
+    <value>tbsps</value>
+  </data>
+  <data name="MeasurementType_Teaspoon" xml:space="preserve">
+    <value>tsp</value>
+  </data>
+  <data name="MeasurementType_Teaspoon_Plural" xml:space="preserve">
+    <value>tsps</value>
+  </data>
+  <data name="MeasurementType_Unknown" xml:space="preserve">
+    <value>item</value>
+  </data>
+  <data name="MeasurementType_Unknown_Plural" xml:space="preserve">
+    <value>items</value>
+  </data>
+  <data name="MeasurementType_Whole" xml:space="preserve">
+    <value>whole</value>
+  </data>
+  <data name="MeasurementType_Whole_Plural" xml:space="preserve">
+    <value>whole</value>
   </data>
 </root>
