@@ -65,8 +65,8 @@
         </Grid>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="LoadingStates">
-                <VisualState x:Name="Unloaded" />
-                <VisualState x:Name="Loaded">
+                <VisualState x:Name="UnloadedState" />
+                <VisualState x:Name="LoadedState">
                     <VisualState.Setters>
                         <Setter Target="IngredientsListViewProgressRing.Visibility" Value="Collapsed" />
                     </VisualState.Setters>

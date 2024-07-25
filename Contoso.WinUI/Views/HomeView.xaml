@@ -99,8 +99,8 @@
         </StackPanel>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="LoadingStates">
-                <VisualState x:Name="Unloaded" />
-                <VisualState x:Name="Loaded">
+                <VisualState x:Name="UnloadedState" />
+                <VisualState x:Name="LoadedState">
                     <VisualState.Setters>
                         <Setter Target="CookbooksListViewProgressRing.Visibility" Value="Collapsed" />
                     </VisualState.Setters>

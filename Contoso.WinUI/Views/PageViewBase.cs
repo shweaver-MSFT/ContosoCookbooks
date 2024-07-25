@@ -26,7 +26,7 @@ namespace Contoso.WinUI.Views
         protected virtual void UpdatedLoadedState()
         {
             bool isLoaded = ViewModelBase != null && ViewModelBase.IsLoaded;
-            VisualStateManager.GoToState(this, isLoaded ? "Loaded" : "Unloaded", true);
+            VisualStateManager.GoToState(this, isLoaded ? "LoadedState" : "UnloadedState", true);
         }
     }
 }
