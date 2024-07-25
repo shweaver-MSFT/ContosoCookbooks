@@ -73,13 +73,7 @@ namespace Contoso.ViewModels
                 _ = cookbookVM.LoadAsync(cookbook, cancellationToken);
             }
 
-            if (IsCancelled())
-            {
-                Unload();
-                return;
-            }
-
-            await base.LoadAsync(parameter);
+            await base.LoadAsync();
         }
 
         public override void Unload()

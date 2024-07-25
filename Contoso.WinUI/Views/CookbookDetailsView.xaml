@@ -3,6 +3,7 @@
     x:Class="Contoso.WinUI.Views.CookbookDetailsView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Contoso.WinUI.Views.Controls"
     xmlns:converters="using:Contoso.WinUI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:Contoso.WinUI.Views"
@@ -19,17 +20,12 @@
             <Grid>
                 <!--  Unloaded state  -->
                 <Grid Visibility="{x:Bind IsLoaded, Mode=OneWay, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
-                    <StackPanel
+                    <ProgressRing
+                        Width="24"
+                        Height="24"
                         HorizontalAlignment="Center"
-                        Orientation="Horizontal"
-                        Spacing="8">
-                        <ProgressRing
-                            Width="24"
-                            Height="24"
-                            VerticalAlignment="Center"
-                            IsActive="True" />
-                        <TextBlock VerticalAlignment="Center" Text="Loading..." />
-                    </StackPanel>
+                        VerticalAlignment="Center"
+                        IsActive="True" />
                 </Grid>
                 <!--  Loaded state  -->
                 <Grid Visibility="{x:Bind IsLoaded, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -50,11 +46,8 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <StackPanel Orientation="Horizontal">
-                <Button Command="{x:Bind ViewModel.NavigateBackCommand}">
-                    <TextBlock Text="Back" />
-                </Button>
-            </StackPanel>
+            <!--  Back button  -->
+            <controls:BackButton Command="{x:Bind ViewModel.NavigateBackCommand}" />
 
             <StackPanel
                 Grid.Row="1"
@@ -63,6 +56,7 @@
                 Spacing="24">
                 <!--  Title  -->
                 <TextBlock
+                    HorizontalAlignment="Center"
                     FontSize="48"
                     FontWeight="SemiBold"
                     Text="{x:Bind ViewModel.CookbookTitle, Mode=OneWay}" />
@@ -73,15 +67,17 @@
                     Orientation="Horizontal"
                     Spacing="8">
                     <Button IsEnabled="False">
-                        <TextBlock Text="Add Recipe" />
+                        <TextBlock x:Uid="AddRecipeButtonTextBlock" />
                     </Button>
                     <Button IsEnabled="False">
-                        <TextBlock Text="Edit Cookbook" />
+                        <TextBlock x:Uid="EditCookbookButtonTextBlock" />
                     </Button>
                 </StackPanel>
 
                 <!--  Recipes  -->
                 <ListView
+                    Width="400"
+                    HorizontalAlignment="Center"
                     IsItemClickEnabled="True"
                     ItemClick="RecipeListView_ItemClick"
                     ItemTemplate="{StaticResource RecipeListItemTemplate}"
@@ -89,12 +85,31 @@
                     SelectionMode="None">
                     <ListView.Header>
                         <TextBlock
+                            x:Uid="RecipesListViewHeaderTextBlock"
                             FontSize="18"
-                            FontWeight="SemiLight"
-                            Text="Recipes" />
+                            FontWeight="SemiLight" />
                     </ListView.Header>
+                    <ListView.Footer>
+                        <ProgressRing
+                            x:Name="RecipesListViewProgressRing"
+                            Width="24"
+                            Height="24"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            IsActive="True" />
+                    </ListView.Footer>
                 </ListView>
             </StackPanel>
         </Grid>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="LoadingStates">
+                <VisualState x:Name="Unloaded" />
+                <VisualState x:Name="Loaded">
+                    <VisualState.Setters>
+                        <Setter Target="RecipesListViewProgressRing.Visibility" Value="Collapsed" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
     </ScrollView>
 </local:PageViewBase>
