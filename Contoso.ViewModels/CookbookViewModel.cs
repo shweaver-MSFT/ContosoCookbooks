@@ -50,13 +50,6 @@ namespace Contoso.ViewModels
 
             if (parameter is ICookbookModel cookbook)
             {
-                await Task.Delay(2000);
-                if (IsCancelled())
-                {
-                    Unload();
-                    return;
-                }
-
                 // Cookbook meta
                 Model = cookbook;
                 Title = cookbook.Title;
@@ -70,7 +63,7 @@ namespace Contoso.ViewModels
                 }
 
                 // RecipeCountText
-                string format = _localizationService.GetString("Home_CookbookListItem_RecipeCountFormat");
+                string format = _localizationService.GetString("HomeCookbookListItemRecipeCountFormat");
                 RecipeCountText = string.Format(format, recipes.Count);
 
                 _telemetryService.Log($"CookbookViewModel loaded: {Title}");

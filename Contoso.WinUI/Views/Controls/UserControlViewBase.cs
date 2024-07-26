@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Contoso.WinUI.Views
+namespace Contoso.WinUI.Views.Controls
 {
     public abstract class UserControlViewBase : UserControl, INotifyPropertyChanged
     {

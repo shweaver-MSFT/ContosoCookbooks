@@ -36,13 +36,6 @@ namespace Contoso.ViewModels
             
             if (parameter is IIngredientModel ingredient)
             {
-                await Task.Delay(2000);
-                if (IsCancelled())
-                {
-                    Unload();
-                    return;
-                }
-
                 // Ingredient meta
                 Name = ingredient.Name;
 

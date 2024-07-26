@@ -3,18 +3,28 @@
     x:Class="Contoso.WinUI.Views.SettingsView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Contoso.WinUI.Views.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:Contoso.WinUI.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
+    <ScrollView>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
 
-    <Grid>
-        <StackPanel Spacing="8">
-            <TextBlock Text="Settings" />
-            <Button x:Name="BackButton" Command="{x:Bind ViewModel.NavigateBackCommand}">
-                <TextBlock Text="Go back" />
-            </Button>
-        </StackPanel>
-    </Grid>
+            <!--  Back button  -->
+            <controls:BackButton Command="{x:Bind ViewModel.NavigateBackCommand}" />
+
+            <StackPanel
+                Grid.Row="1"
+                HorizontalAlignment="Center"
+                Spacing="8">
+                <!--  Settings go here  -->
+            </StackPanel>
+        </Grid>
+    </ScrollView>
 </local:PageViewBase>

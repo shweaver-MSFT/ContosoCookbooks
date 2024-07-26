@@ -1,19 +1,19 @@
 using Contoso.ViewModels;
 using Microsoft.UI.Xaml;
 
-namespace Contoso.WinUI.Views
+namespace Contoso.WinUI.Views.Controls
 {
-    public sealed partial class IngredientListItemView
+    public sealed partial class IngredientListItem
     {
         public static readonly DependencyProperty ViewModelProperty = DependencyProperty.Register(
             "ViewModel",
             typeof(IngredientViewModel),
-            typeof(IngredientListItemView),
+            typeof(IngredientListItem),
             new PropertyMetadata(null, new PropertyChangedCallback(OnViewModelChanged)));
 
         private static void OnViewModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is IngredientListItemView control)
+            if (d is IngredientListItem control)
             {
                 if (e.OldValue is IngredientViewModel oldVM)
                 {
@@ -59,7 +59,7 @@ namespace Contoso.WinUI.Views
             set => OnPropertyChanged(ViewModelProperty, value);
         }
 
-        public IngredientListItemView()
+        public IngredientListItem()
         {
             this.InitializeComponent();
             UpdateVisualState();

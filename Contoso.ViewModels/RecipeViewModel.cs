@@ -42,19 +42,8 @@ namespace Contoso.ViewModels
 
         public override async Task LoadAsync(object? parameter = null, CancellationToken? cancellationToken = null)
         {
-            Debug.Assert(cancellationToken != null);
-
-            bool IsCancelled() => cancellationToken.HasValue && cancellationToken.Value.IsCancellationRequested;
-
             if (parameter is IRecipeModel recipe)
             {
-                await Task.Delay(2000);
-                if (IsCancelled())
-                {
-                    Unload();
-                    return;
-                }
-
                 // Recipe meta
                 Model = recipe;
                 Name = recipe.Name;

@@ -2,7 +2,6 @@
 using Contoso.Core.Models.Data;
 using Contoso.Data.Models;
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -59,25 +58,25 @@ namespace Contoso.Data.Mock
 
         public async Task AddCookbookAsync(ICookbookModel cookbook)
         {
-            await Task.CompletedTask;
+            await Task.Delay(2000);
             _cookbooks.Add(cookbook);
         }
 
         public async Task AddIngredientAsync(IIngredientModel ingredient)
         {
-            await Task.CompletedTask;
+            await Task.Delay(2000);
             _ingredients.Add(ingredient);
         }
 
         public async Task AddRecipeAsync(IRecipeModel recipe)
         {
-            await Task.CompletedTask;
+            await Task.Delay(2000);
             _recipes.Add(recipe);
         }
 
         public async Task<ICookbookModel> GetCookbookAsync(string cookbookId)
         {
-            await Task.CompletedTask;
+            await Task.Delay(2000);
 
             foreach (ICookbookModel cookbook in _cookbooks)
             {
@@ -92,13 +91,13 @@ namespace Contoso.Data.Mock
 
         public async Task<IList<ICookbookModel>> GetCookbooksAsync()
         {
-            await Task.CompletedTask;
+            await Task.Delay(2000);
             return _cookbooks;
         }
 
         public async Task<IIngredientModel> GetIngredientAsync(string ingredientId)
         {
-            await Task.CompletedTask;
+            await Task.Delay(2000);
 
             foreach (IIngredientModel ingredient in _ingredients)
             {
@@ -113,7 +112,7 @@ namespace Contoso.Data.Mock
 
         public async Task<IList<IIngredientModel>> GetIngredientsAsync(string recipeId)
         {
-            await Task.CompletedTask;
+            await Task.Delay(2000);
 
             IList<IIngredientModel> ingredients = [];
             foreach (IIngredientModel ingredient in _ingredients)
@@ -129,7 +128,7 @@ namespace Contoso.Data.Mock
 
         public async Task<IRecipeModel> GetRecipeAsync(string recipeId)
         {
-            await Task.CompletedTask;
+            await Task.Delay(2000);
 
             foreach (IRecipeModel recipe in _recipes)
             {
@@ -144,7 +143,7 @@ namespace Contoso.Data.Mock
 
         public async Task<IList<IRecipeModel>> GetRecipesAsync(string cookbookId)
         {
-            await Task.CompletedTask;
+            await Task.Delay(2000);
 
             IList<IRecipeModel> recipes = [];
             foreach (IRecipeModel recipe in _recipes)
@@ -160,25 +159,25 @@ namespace Contoso.Data.Mock
 
         public async Task RemoveCookbookAsync(string cookbookId)
         {
-            await Task.CompletedTask;
+            await Task.Delay(2000);
             _cookbooks.RemoveAll(c => c.Id == cookbookId);
         }
 
         public async Task RemoveIngredientAsync(string ingredientId)
         {
-            await Task.CompletedTask;
+            await Task.Delay(2000);
             _ingredients.RemoveAll(i => i.Id == ingredientId);
         }
 
         public async Task RemoveRecipeAsync(string recipeId)
         {
-            await Task.CompletedTask;
+            await Task.Delay(2000);
             _recipes.RemoveAll(r => r.Id == recipeId);
         }
 
         public async Task UpdateCookbookAsync(ICookbookModel cookbook)
         {
-            await Task.CompletedTask;
+            await Task.Delay(2000);
 
             for (int x = 0; x < _cookbooks.Count; x++)
             {
@@ -193,7 +192,7 @@ namespace Contoso.Data.Mock
 
         public async Task UpdateIngredientAsync(IIngredientModel ingredient)
         {
-            await Task.CompletedTask;
+            await Task.Delay(2000);
 
             for (int x = 0; x < _ingredients.Count; x++)
             {
@@ -208,7 +207,7 @@ namespace Contoso.Data.Mock
 
         public async Task UpdateRecipeAsync(IRecipeModel recipe)
         {
-            await Task.CompletedTask;
+            await Task.Delay(2000);
 
             for (int x = 0; x < _recipes.Count; x++)
             {
