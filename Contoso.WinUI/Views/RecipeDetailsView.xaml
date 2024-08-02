@@ -25,7 +25,7 @@
             </Grid.RowDefinitions>
 
             <!--  Back button  -->
-            <controls:BackButton Command="{x:Bind ViewModel.NavigateBackCommand}" />
+            <controls:BackButton Command="{x:Bind ViewModel.NavigateBackCommand, Mode=OneWay}" />
 
             <StackPanel
                 Grid.Row="1"

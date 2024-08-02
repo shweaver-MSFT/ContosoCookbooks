@@ -4,6 +4,7 @@ using Contoso.Core.Models.Navigation;
 using Contoso.Core.Services;
 using Contoso.Core.Services.DataProviders;
 using Contoso.Services.Navigation;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
@@ -55,22 +56,29 @@ namespace Contoso.ViewModels
                 cancellationToken = _cancellationTokenSource.Token;
             }
 
-            // Get cookbook models
-            IList<ICookbookModel> cookbooks = await _cookbookDataProvider.GetCookbooksAsync();
-            if (IsCancelled())
+            try
             {
-                Unload();
-                return;
+                // Get cookbook models
+                IList<ICookbookModel> cookbooks = await _cookbookDataProvider.GetCookbooksAsync();
+                if (IsCancelled())
+                {
+                    Unload();
+                    return;
+                }
+
+                // Create VMs for each model
+                foreach (ICookbookModel cookbook in cookbooks)
+                {
+                    CookbookViewModel cookbookVM = _cookbookViewModelFactory.Create();
+                    Cookbooks.Add(cookbookVM);
+
+                    // Don't wait for the load task
+                    _ = cookbookVM.LoadAsync(cookbook, cancellationToken);
+                }
             }
-
-            // Create VMs for each model
-            foreach (ICookbookModel cookbook in cookbooks)
+            catch (Exception)
             {
-                CookbookViewModel cookbookVM = _cookbookViewModelFactory.Create();
-                Cookbooks.Add(cookbookVM);
-
-                // Don't wait for the load task
-                _ = cookbookVM.LoadAsync(cookbook, cancellationToken);
+                // TODO: Handle error state
             }
 
             await base.LoadAsync();
@@ -79,7 +87,7 @@ namespace Contoso.ViewModels
         public override void Unload()
         {
             _cancellationTokenSource.Cancel();
-            _cookbooks = [];
+            _cookbooks.Clear();
             base.Unload();
         }
 

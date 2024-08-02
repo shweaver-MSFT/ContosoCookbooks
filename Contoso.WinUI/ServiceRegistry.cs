@@ -38,6 +38,7 @@ namespace Contoso.WinUI
             services.AddSingleton<SettingsViewModel>();
             services.AddSingleton<CookbookDetailsViewModel>();
             services.AddSingleton<RecipeDetailsViewModel>();
+            services.AddSingleton<RecipeCreationViewModel>();
 
             // Configure the default Ioc container
             IServiceProvider serviceProvider = services.BuildServiceProvider();

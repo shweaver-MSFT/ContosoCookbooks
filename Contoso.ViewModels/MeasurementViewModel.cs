@@ -39,15 +39,22 @@ namespace Contoso.ViewModels
         {
             Debug.Assert(cancellationToken != null);
 
-            if (parameter is IMeasurementModel measurementModel)
+            try
             {
-                AmountText = GetAmountString(measurementModel.Amount);
-                MeasurementTypeText = GetMeasurementTypeString(_localizationService, measurementModel.MeasurementType, measurementModel.Amount);
+                if (parameter is IMeasurementModel measurementModel)
+                {
+                    AmountText = GetAmountString(measurementModel.Amount);
+                    MeasurementTypeText = GetMeasurementTypeString(_localizationService, measurementModel.MeasurementType, measurementModel.Amount);
 
-                _telemetryService.Log($"MeasurementViewModel loaded: {AmountText} {MeasurementTypeText}");
+                    _telemetryService.Log($"MeasurementViewModel loaded: {AmountText} {MeasurementTypeText}");
+                }
+            }
+            catch (Exception)
+            {
+                // TODO: Handle error state
             }
 
-            return base.LoadAsync(parameter, cancellationToken);
+            return base.LoadAsync();
         }
 
         public override void Unload()

@@ -62,11 +62,11 @@
                 Orientation="Horizontal"
                 Spacing="8">
                 <!--  App settings  -->
-                <Button Command="{x:Bind ViewModel.NavigateToSettingsCommand}">
+                <Button Command="{x:Bind ViewModel.NavigateToSettingsCommand, Mode=OneWay}">
                     <TextBlock x:Uid="HomeSettingsButtonTextBlock" />
                 </Button>
                 <!--  Create a new Cookbook  -->
-                <Button Command="{x:Bind ViewModel.NavigateToCookbookCreationCommand}" IsEnabled="False">
+                <Button Command="{x:Bind ViewModel.NavigateToCookbookCreationCommand, Mode=OneWay}" IsEnabled="False">
                     <TextBlock x:Uid="HomeNewCookbookButtonTextBlock" />
                 </Button>
             </StackPanel>

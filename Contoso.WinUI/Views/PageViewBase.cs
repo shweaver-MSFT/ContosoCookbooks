@@ -12,18 +12,18 @@ namespace Contoso.WinUI.Views
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             await ViewModelBase.LoadAsync(e.Parameter);
-            UpdatedLoadedState();
+            UpdatedVisualState();
             base.OnNavigatedTo(e);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             ViewModelBase.Unload();
-            UpdatedLoadedState();
+            UpdatedVisualState();
             base.OnNavigatedFrom(e);
         }
 
-        protected virtual void UpdatedLoadedState()
+        protected virtual void UpdatedVisualState()
         {
             bool isLoaded = ViewModelBase != null && ViewModelBase.IsLoaded;
             VisualStateManager.GoToState(this, isLoaded ? "LoadedState" : "UnloadedState", true);

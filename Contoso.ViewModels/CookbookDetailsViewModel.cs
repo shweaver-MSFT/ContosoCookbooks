@@ -3,7 +3,9 @@ using Contoso.Core.Models.Data;
 using Contoso.Core.Models.Navigation;
 using Contoso.Core.Services;
 using Contoso.Core.Services.DataProviders;
+using Contoso.Data.Models;
 using Contoso.Services.Navigation;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
@@ -20,10 +22,12 @@ namespace Contoso.ViewModels
 
         private CancellationTokenSource _cancellationTokenSource;
 
-        public IRelayCommand AddRecipeCommand { get; }
-        public IRelayCommand EditRecipeCommand { get; }
         public IRelayCommand NavigateBackCommand { get; }
+        public IRelayCommand NavigateToCookbookEditCommand { get; }
+        public IRelayCommand NavigateToRecipeCreationCommand { get; }
         public IRelayCommand<RecipeViewModel> NavigateToRecipeDetailsCommand { get; }
+
+        private ICookbookModel? _cookbookModel;
 
         private string _cookbookTitle;
         public string CookbookTitle
@@ -50,9 +54,9 @@ namespace Contoso.ViewModels
             _cookbookTitle = string.Empty;
             _recipes = [];
 
-            AddRecipeCommand = new RelayCommand(AddRecipe, () => IsLoaded);
-            EditRecipeCommand = new RelayCommand(EditRecipe, () => IsLoaded);
             NavigateBackCommand = new RelayCommand(NavigateBack);
+            NavigateToCookbookEditCommand = new RelayCommand(NavigateToCookbookEdit, () => _cookbookModel != null);
+            NavigateToRecipeCreationCommand = new RelayCommand(NavigateToRecipeCreation, () => _cookbookModel != null);
             NavigateToRecipeDetailsCommand = new RelayCommand<RecipeViewModel>(NavigateToRecipeDetails, (vm) => vm?.IsLoaded == true);
         }
 
@@ -65,54 +69,73 @@ namespace Contoso.ViewModels
                 cancellationToken = _cancellationTokenSource.Token;
             }
 
-            if (parameter is ICookbookModel cookbookModel)
+            try
             {
-                // Title
-                CookbookTitle = cookbookModel.Title;
-
-                // Get recipe models
-                IList<IRecipeModel> recipes = await _cookbookDataProvider.GetRecipesAsync(cookbookModel.Id);
-                if (IsCancelled())
+                if (parameter is ICookbookModel cookbookModel)
                 {
-                    Unload();
-                    return;
-                }
+                    _cookbookModel = cookbookModel;
+                    NavigateToRecipeCreationCommand.NotifyCanExecuteChanged();
+                    NavigateToCookbookEditCommand.NotifyCanExecuteChanged();
 
-                // Create VMs for each model
-                foreach (IRecipeModel recipe in recipes)
-                {
-                    RecipeViewModel recipeVM = _recipeViewModelFactory.Create();
-                    Recipes.Add(recipeVM);
+                    // Title
+                    CookbookTitle = cookbookModel.Title;
 
-                    // Don't wait for the load task
-                    _ = recipeVM.LoadAsync(recipe, cancellationToken);
+                    // Get recipe models
+                    IList<IRecipeModel> recipes = await _cookbookDataProvider.GetRecipesAsync(cookbookModel.Id);
+                    if (IsCancelled())
+                    {
+                        Unload();
+                        return;
+                    }
+
+                    // Create VMs for each model
+                    foreach (IRecipeModel recipe in recipes)
+                    {
+                        RecipeViewModel recipeVM = _recipeViewModelFactory.Create();
+                        Recipes.Add(recipeVM);
+
+                        // Don't wait for the load task
+                        _ = recipeVM.LoadAsync(recipe, cancellationToken);
+                    }
                 }
             }
+            catch (Exception)
+            {
+                // TODO: Handle error state
+            }
 
-            await base.LoadAsync(parameter);
+            await base.LoadAsync();
         }
 
         public override void Unload()
         {
+            _cancellationTokenSource.Cancel();
+            _cookbookModel = null;
             _cookbookTitle = string.Empty;
             _recipes = [];
 
             base.Unload();
         }
 
-        private void AddRecipe()
-        {
-
-        }
-
-        private void EditRecipe()
-        {
-
-        }
-
         private void NavigateBack()
         {
             _navigationService.GoBack();
+        }
+
+        private void NavigateToCookbookEdit()
+        {
+            if (_cookbookModel != null)
+            {
+                _navigationService.Navigate(new NavigationRequest(NavigationRouteKey.CookbookEdit, _cookbookModel));
+            }
+        }
+
+        private void NavigateToRecipeCreation()
+        {
+            if (_cookbookModel != null)
+            {
+                _navigationService.Navigate(new NavigationRequest(NavigationRouteKey.RecipeCreation, _cookbookModel));
+            }
         }
 
         private void NavigateToRecipeDetails(RecipeViewModel? recipe)

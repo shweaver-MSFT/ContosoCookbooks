@@ -14,6 +14,9 @@
     <IsAotCompatible>true</IsAotCompatible>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Views\RecipeCreationView.xaml" />
+  </ItemGroup>
 
   <ItemGroup>
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -45,6 +48,11 @@
     <ProjectReference Include="..\Contoso.Services.Data\Contoso.Services.Data.csproj" />
     <ProjectReference Include="..\Contoso.Services.Navigation\Contoso.Services.Navigation.csproj" />
     <ProjectReference Include="..\Contoso.ViewModels\Contoso.ViewModels.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\RecipeCreationView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <!--

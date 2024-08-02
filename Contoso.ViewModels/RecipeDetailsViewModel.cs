@@ -2,7 +2,7 @@
 using Contoso.Core.Models.Data;
 using Contoso.Core.Services;
 using Contoso.Core.Services.DataProviders;
-using Contoso.ViewModels.Factories;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
@@ -52,43 +52,50 @@ namespace Contoso.ViewModels
         public override async Task LoadAsync(object? parameter = null, CancellationToken? cancellationToken = null)
         {
             bool IsCancelled() => cancellationToken.HasValue && cancellationToken.Value.IsCancellationRequested;
-
             if (cancellationToken == null)
             {
                 _cancellationTokenSource = _cancellationService.GetLinkedTokenSource();
                 cancellationToken = _cancellationTokenSource.Token;
             }
 
-            if (parameter is IRecipeModel recipe)
+            try
             {
-                Name = recipe.Name;
-
-                // Get ingredient models
-                IList<IIngredientModel> ingredients = await _cookbookDataProvider.GetIngredientsAsync(recipe.Id);
-                if (IsCancelled())
+                if (parameter is IRecipeModel recipe)
                 {
-                    Unload();
-                    return;
-                }
+                    Name = recipe.Name;
 
-                // Create VMs for each model
-                foreach (IIngredientModel ingredient in ingredients)
-                {
-                    IngredientViewModel ingredientVM = _ingredientViewModelFactory.Create();
-                    Ingredients.Add(ingredientVM);
-                    
-                    // Don't wait for the load task
-                    _ = ingredientVM.LoadAsync(ingredient, cancellationToken);
+                    // Get ingredient models
+                    IList<IIngredientModel> ingredients = await _cookbookDataProvider.GetIngredientsAsync(recipe.Id);
+                    if (IsCancelled())
+                    {
+                        Unload();
+                        return;
+                    }
+
+                    // Create VMs for each model
+                    foreach (IIngredientModel ingredient in ingredients)
+                    {
+                        IngredientViewModel ingredientVM = _ingredientViewModelFactory.Create();
+                        Ingredients.Add(ingredientVM);
+
+                        // Don't wait for the load task
+                        _ = ingredientVM.LoadAsync(ingredient, cancellationToken);
+                    }
                 }
             }
+            catch (Exception)
+            {
+                // TODO: Handle error state
+            }
 
-            await base.LoadAsync(parameter);
+            await base.LoadAsync();
         }
 
         public override void Unload()
         {
+            _cancellationTokenSource.Cancel();
             _name = string.Empty;
-            _ingredients = [];
+            _ingredients.Clear();
             base.Unload();
         }
 

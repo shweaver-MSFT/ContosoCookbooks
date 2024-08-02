@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <local:PageViewBase
-    x:Class="Contoso.WinUI.Views.SettingsView"
+    x:Class="Contoso.WinUI.Views.RecipeCreationView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:Contoso.WinUI.Views.Controls"
@@ -9,6 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
+
     <ScrollView>
         <Grid>
             <Grid.RowDefinitions>
@@ -23,7 +24,29 @@
                 Grid.Row="1"
                 HorizontalAlignment="Center"
                 Spacing="8">
-                <!--  Settings go here  -->
+                <TextBlock Text="New Recipe" />
+
+                <!--  Name  -->
+                <TextBox PlaceholderText="Recipe name" />
+
+                <!--  Description  -->
+                <TextBox
+                    Height="200"
+                    AcceptsReturn="True"
+                    PlaceholderText="Recipe description" />
+
+                <!--  Prep Time  -->
+
+
+                <!--  Cook Time  -->
+
+
+                <!--  Ingredients  -->
+
+                <!--  Submit  -->
+                <Button Command="{x:Bind ViewModel.CreateRecipeCommand, Mode=OneWay}">
+                    <TextBlock Text="Create recipe" />
+                </Button>
             </StackPanel>
         </Grid>
     </ScrollView>

@@ -1,6 +1,7 @@
 ﻿using Contoso.Core.Models.Data;
 using Contoso.Core.Services;
 using Contoso.Core.Services.DataProviders;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
@@ -45,31 +46,37 @@ namespace Contoso.ViewModels
         public override async Task LoadAsync(object? parameter = null, CancellationToken? cancellationToken = null)
         {
             Debug.Assert(cancellationToken != null);
-
             bool IsCancelled() => cancellationToken.HasValue && cancellationToken.Value.IsCancellationRequested;
 
-            if (parameter is ICookbookModel cookbook)
+            try
             {
-                // Cookbook meta
-                Model = cookbook;
-                Title = cookbook.Title;
-
-                // Get recipe models
-                IList<IRecipeModel> recipes = await _cookbookDataProvider.GetRecipesAsync(cookbook.Id);
-                if (IsCancelled())
+                if (parameter is ICookbookModel cookbook)
                 {
-                    Unload();
-                    return;
+                    // Cookbook meta
+                    Model = cookbook;
+                    Title = cookbook.Title;
+
+                    // Get recipe models
+                    IList<IRecipeModel> recipes = await _cookbookDataProvider.GetRecipesAsync(cookbook.Id);
+                    if (IsCancelled())
+                    {
+                        Unload();
+                        return;
+                    }
+
+                    // RecipeCountText
+                    string format = _localizationService.GetString("HomeCookbookListItemRecipeCountFormat");
+                    RecipeCountText = string.Format(format, recipes.Count);
+
+                    _telemetryService.Log($"CookbookViewModel loaded: {Title}");
                 }
-
-                // RecipeCountText
-                string format = _localizationService.GetString("HomeCookbookListItemRecipeCountFormat");
-                RecipeCountText = string.Format(format, recipes.Count);
-
-                _telemetryService.Log($"CookbookViewModel loaded: {Title}");
+            }
+            catch (Exception)
+            {
+                // TODO: Handle error state
             }
 
-            await base.LoadAsync(parameter);
+            await base.LoadAsync();
         }
 
         public override void Unload()

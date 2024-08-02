@@ -1,5 +1,6 @@
 ﻿using Contoso.Core.Models.Data;
 using Contoso.Core.Services;
+using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,26 +32,32 @@ namespace Contoso.ViewModels
         public override async Task LoadAsync(object? parameter = null, CancellationToken? cancellationToken = null)
         {
             Debug.Assert(cancellationToken != null);
-
             bool IsCancelled() => cancellationToken.HasValue && cancellationToken.Value.IsCancellationRequested;
-            
-            if (parameter is IIngredientModel ingredient)
+
+            try
             {
-                // Ingredient meta
-                Name = ingredient.Name;
-
-                // Load the measurement
-                await Measurement.LoadAsync(ingredient.Measurement, cancellationToken);
-                if (IsCancelled())
+                if (parameter is IIngredientModel ingredient)
                 {
-                    Unload();
-                    return;
-                }
+                    // Ingredient meta
+                    Name = ingredient.Name;
 
-                _telemetryService.Log($"IngredientViewModel loaded: {Name}");
+                    // Load the measurement
+                    await Measurement.LoadAsync(ingredient.Measurement, cancellationToken);
+                    if (IsCancelled())
+                    {
+                        Unload();
+                        return;
+                    }
+
+                    _telemetryService.Log($"IngredientViewModel loaded: {Name}");
+                }
+            }
+            catch (Exception)
+            {
+                // TODO: Handle error state
             }
 
-            await base.LoadAsync(parameter);
+            await base.LoadAsync();
         }
 
         public override void Unload()

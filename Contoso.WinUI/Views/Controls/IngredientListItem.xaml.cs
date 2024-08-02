@@ -17,23 +17,23 @@ namespace Contoso.WinUI.Views.Controls
             {
                 if (e.OldValue is IngredientViewModel oldVM)
                 {
-                    control.UnregisterEvents(oldVM);
+                    control.UnregisterViewModelEvents(oldVM);
                 }
 
                 if (e.NewValue is IngredientViewModel newVM)
                 {
-                    control.RegisterForEvents(newVM);
+                    control.RegisterViewModelEvents(newVM);
                 }
             }
         }
 
-        private void RegisterForEvents(IngredientViewModel vm)
+        private void RegisterViewModelEvents(IngredientViewModel vm)
         {
             vm.PropertyChanged += OnViewModelPropertyChanged;
             UpdateVisualState();
         }
 
-        private void UnregisterEvents(IngredientViewModel vm)
+        private void UnregisterViewModelEvents(IngredientViewModel vm)
         {
             vm.PropertyChanged -= OnViewModelPropertyChanged;
             UpdateVisualState();

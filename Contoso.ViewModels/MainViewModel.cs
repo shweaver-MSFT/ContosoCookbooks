@@ -35,7 +35,7 @@ namespace Contoso.ViewModels
             // Go to the default view.
             _navigationService.Navigate(new NavigationRequest(NavigationRouteKey.Home));
 
-            return base.LoadAsync(parameter);
+            return base.LoadAsync();
         }
 
         public override void Unload()

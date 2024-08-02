@@ -2,7 +2,7 @@
 
 namespace Contoso.Data.Models
 {
-    internal class CookbookModel : ICookbookModel
+    public class CookbookModel : ICookbookModel
     {
         public string Id { get; }
 

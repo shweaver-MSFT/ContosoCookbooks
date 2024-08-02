@@ -1,5 +1,6 @@
 ﻿using Contoso.Core.Models.Data;
 using Contoso.Core.Services;
+using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading;
@@ -42,22 +43,29 @@ namespace Contoso.ViewModels
 
         public override async Task LoadAsync(object? parameter = null, CancellationToken? cancellationToken = null)
         {
-            if (parameter is IRecipeModel recipe)
+            try
             {
-                // Recipe meta
-                Model = recipe;
-                Name = recipe.Name;
+                if (parameter is IRecipeModel recipe)
+                {
+                    // Recipe meta
+                    Model = recipe;
+                    Name = recipe.Name;
 
-                _telemetryService.Log($"RecipeViewModel loaded: {Name}");
+                    _telemetryService.Log($"RecipeViewModel loaded: {Name}");
+                }
+            }
+            catch (Exception)
+            {
+                // TODO: Handle error state
             }
 
-            await base.LoadAsync(parameter);
+            await base.LoadAsync();
         }
 
         public override void Unload()
         {
             _name = string.Empty;
-            _ingredients = [];
+            _ingredients.Clear();
             base.Unload();
         }
     }

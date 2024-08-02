@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Contoso.Core\Contoso.Core.csproj" />
+    <ProjectReference Include="..\Contoso.Services.Data\Contoso.Services.Data.csproj" />
     <ProjectReference Include="..\Contoso.Services.Navigation\Contoso.Services.Navigation.csproj" />
   </ItemGroup>
 </Project>

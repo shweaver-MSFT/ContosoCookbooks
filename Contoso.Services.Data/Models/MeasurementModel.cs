@@ -2,7 +2,7 @@
 
 namespace Contoso.Data.Models
 {
-    internal class MeasurementModel : IMeasurementModel
+    public class MeasurementModel : IMeasurementModel
     {
         public MeasurementType MeasurementType { get; }
         public PreparationType PreparationType { get; }

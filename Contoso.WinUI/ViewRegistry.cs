@@ -13,6 +13,7 @@ namespace Contoso.WinUI
             { NavigationRouteKey.Settings, typeof(SettingsView) },
             { NavigationRouteKey.CookbookDetails, typeof(CookbookDetailsView) },
             { NavigationRouteKey.RecipeDetails, typeof(RecipeDetailsView) },
+            { NavigationRouteKey.RecipeCreation, typeof(RecipeCreationView) },
         };
 
         public static Type GetViewType(NavigationRouteKey key)

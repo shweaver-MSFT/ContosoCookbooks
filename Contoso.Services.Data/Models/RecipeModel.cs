@@ -3,7 +3,7 @@ using System;
 
 namespace Contoso.Data.Models
 {
-    internal class RecipeModel : IRecipeModel
+    public class RecipeModel : IRecipeModel
     {
         public string Id { get; }
         public string ParentId { get; }
