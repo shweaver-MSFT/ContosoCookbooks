@@ -15,6 +15,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Themes\Generic.xaml" />
     <None Remove="Views\RecipeCreationView.xaml" />
   </ItemGroup>
 
@@ -44,10 +45,14 @@
     <ProjectCapability Include="Msix" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Contoso.Core\Contoso.Core.csproj" />
     <ProjectReference Include="..\Contoso.Services.Data\Contoso.Services.Data.csproj" />
     <ProjectReference Include="..\Contoso.Services.Navigation\Contoso.Services.Navigation.csproj" />
     <ProjectReference Include="..\Contoso.ViewModels\Contoso.ViewModels.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\RecipeCreationView.xaml">

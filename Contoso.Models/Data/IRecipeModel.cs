@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Contoso.Core.Models.Data
+namespace Contoso.Models.Data
 {
     public interface IRecipeModel
     {

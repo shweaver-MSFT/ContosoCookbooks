@@ -1,4 +1,4 @@
-﻿namespace Contoso.Core.Models.Data
+﻿namespace Contoso.Models.Data
 {
     public enum PreparationType
     {

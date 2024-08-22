@@ -1,4 +1,4 @@
-﻿namespace Contoso.Core.Models.Navigation
+﻿namespace Contoso.Models.Navigation
 {
     public interface INavigationRequest
     {

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <RootNamespace>Contoso.Core</RootNamespace>
+    <RootNamespace>Contoso.Services</RootNamespace>
     <IsAotCompatible>true</IsAotCompatible>
     <Nullable>enable</Nullable>
   </PropertyGroup>

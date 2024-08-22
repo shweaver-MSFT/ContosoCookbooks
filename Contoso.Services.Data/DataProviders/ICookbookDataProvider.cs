@@ -1,8 +1,8 @@
-﻿using Contoso.Core.Models.Data;
+﻿using Contoso.Models.Data;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Contoso.Core.Services.DataProviders
+namespace Contoso.Services.Data.DataProviders
 {
     public interface ICookbookDataProvider
     {

@@ -1,6 +1,6 @@
-﻿using Contoso.Core.Models.Data;
+﻿using Contoso.Models.Data;
 
-namespace Contoso.Data.Models
+namespace Contoso.Services.Data.Models
 {
     public class IngredientModel : IIngredientModel
     {

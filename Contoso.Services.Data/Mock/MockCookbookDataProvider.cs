@@ -1,11 +1,11 @@
-﻿using Contoso.Core.Services.DataProviders;
-using Contoso.Core.Models.Data;
-using Contoso.Data.Models;
+﻿using Contoso.Models.Data;
+using Contoso.Services.Data.DataProviders;
+using Contoso.Services.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Contoso.Data.Mock
+namespace Contoso.Services.Data.Mock
 {
     public class MockCookbookDataProvider : ICookbookDataProvider
     {
